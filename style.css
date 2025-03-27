@@ -1,5 +1,4 @@
-html, body
-{
+html, body {
     background-color: #F1F5F9;
     height: 100%;
     width: 100%;
@@ -8,163 +7,153 @@ html, body
     place-items: center;
     font-family: 'Helvetica', 'Arial', sans-serif;
 }
-.wrapper
-{
+
+.wrapper {
     height: 96%;
     width: 30%;
     display: flex;
     flex-direction: column;
     margin: auto;
+    justify-content: space-between;
 }
-.gateway_header
-{
+
+.gateway_header {
     flex: 2;
     text-align: center;
 }
-.gateway_form
-{
+
+.gateway_form {
     flex: 6;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
-.gateway_buttons
-{
+
+.gateway_buttons {
     flex: 2;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     text-align: center;
 }
-.text_theme
-{
+
+.text_theme {
     color: #6047FF;
     text-align: center;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
 }
 
-span
-{
+span {
     color: #7D7E80;
     font-size: 14px;
-    line-height: 12px;
+    display: block;
+    margin-top: 6px;
 }
 
-a
-{
+a {
     text-decoration: none;
     color: black;
 }
 
-.pinput
-{
+.pinput {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 75%;
+    width: 50%;
 }
 
-.pinput_item
-{
-    border: none;
-    color: black;
-    font-size: 32px;
-    text-align: center;
-    padding: 10px;
-    width: 100%;
-    max-width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    outline: 1px solid black;
-}
-
-form
-{
-    flex: 2;
+form {
+    flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: 12px;
 }
 
-.card_number_input
+.pinput_item 
 {
-    border: none;
-    color: black;
+    font-size: 32px;
+    text-align: center;
+    width: 100%;
+    max-width: 20px;
+    height: 20px;
+}
+
+.card_number_input 
+{
     width: calc(100% - 20px);
     font-size: 20px;
-    padding: 10px;
     height: 20px;
+}
+
+form input
+{
     border-radius: 4px;
-    outline: 1px solid black;
+    outline: 0.2px solid black;
+    padding: 10px;
+    color: black;
+    border: none;
 }
 
-.amount
+form input:focus
 {
+    outline: 2px solid #6047FF;
+}
+
+.amount {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
-.call_to_action
-{
+.call_to_action {
     font-weight: bold;
     font-size: 28px;
+    margin: 0px;
 }
 
-.primary_btn
-{
+.primary_btn {
     color: white;
     background-color: #6047FF;
-    border-color: #6047FF;
 }
 
-.secondary_btn
-{
+.secondary_btn {
     background-color: transparent;
-    border-color: black;
+    border: 0.2px solid black !important;
     color: black;
-    outline: none;
 }
 
 .btn {
-    border: 1px solid black;
+    border: none;
+    outline: none;
     cursor: pointer;
     border-radius: 8px;
     width: 100%;
     height: 40px;
 }
 
-/* Media Queries */
-
-@media only screen and (max-width: 300px) 
+label
 {
-    .wrapper
-    {
+    margin: 6px 0px 6px 0px;
+    display: block;
+}
+
+@media only screen and (min-width: 425px) {
+    .wrapper {
         width: 90%;
     }
 
-    .pinput
-    {
+    .pinput {
         width: 100%;
     }
 }
 
-@media only screen and (max-width: 600px) 
-{
-    .wrapper
-    {
-        width: 80%;
+@media only screen and (min-width: 768px) {
+    .wrapper {
+        width: 30%;
     }
 
-    .pinput
-    {
-        width: 70%;
-    }
-}
-
-@media only screen and (min-width: 600px) 
-{
-    .pinput
-    {
+    .pinput {
         width: 70%;
     }
 }

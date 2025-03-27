@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Payment Gateway</title>
 </head>
 <body>
     <div class="wrapper">
@@ -14,28 +14,30 @@
             <p class="amount">5750 F</p>
         </div>
         <div class="gateway_form">
-            <p class="call_to_action">Pay with Ypay</p>
-            <span class="fading_text">Follow these steps to secure your payment</span>
+            <div>
+                <p class="call_to_action">Pay with Ypay</p>
+                <span class="fading_text">Follow these steps to secure your payment</span>
+            </div>
             <form action="">
                 <div class="form_item">
-                    <p>Card number</p>
-                    <input class="card_number_input" type="text" placeholder="Enter your card number">
-                </div>
-                
-                <div class="form_item">
-                    <p>Enter the OTP</p>
-                    <div class="pinput">
-                        <input class="pinput_item" type="text" maxlength="1">
-                        <input class="pinput_item" type="text" maxlength="1">
-                        <input class="pinput_item" type="text" maxlength="1">
-                        <input class="pinput_item" type="text" maxlength="1">
-                    </div>
-                    <span class="fading_text">Generate the OPT via login page</span>
+                    <label for="card_number">Card number</label>
+                    <input id="card_number" class="card_number_input" type="text" placeholder="Enter your card number" required>
                 </div>
 
                 <div class="form_item">
-                    <input type="button" value="Continue" class="primary_btn btn">
-                </div>    
+                    <label for="otp">Enter the OTP</label>
+                    <div class="pinput">
+                        <input class="pinput_item" type="text" maxlength="1" required>
+                        <input class="pinput_item" type="text" maxlength="1" required>
+                        <input class="pinput_item" type="text" maxlength="1" required>
+                        <input class="pinput_item" type="text" maxlength="1" required>
+                    </div>
+                    <span class="fading_text">Generate the OTP via login page</span>
+                </div>
+
+                <div class="form_item">
+                    <input type="submit" value="Continue" class="primary_btn btn">
+                </div>
             </form>
         </div>
         <div class="gateway_buttons">
@@ -44,4 +46,5 @@
         </div>
     </div>
 </body>
+<script src="scripts.js"></script>
 </html>
