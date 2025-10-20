@@ -1,0 +1,252 @@
+/* ===== Modal ==== */
+.modal_box
+{
+    /*border: 1px solid black;*/
+    align-self: center;
+    margin: auto;
+    height: 99%;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius);
+    gap: calc(var(--gap)/2);
+}
+
+/* Screen width less than 425px */
+@media only screen and (max-width: 425px)
+{
+    .modal_box
+    {
+        width: 100%;
+    }
+}
+
+/* For other screens */
+@media only screen and (min-width: 425px)
+{
+    .modal_box
+    {
+        width: 425px;
+    }
+}
+
+/*===== Modal content =====*/
+/* header */
+.modal_header
+{
+    /*border: 1px solid black;*/
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding);
+    background-color: var(--color-primary);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.first_stack
+{
+    /*border: 1px solid black;*/
+    flex-grow: 5;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* logo, closing button and the icon */
+.shop_icon
+{
+    /*border: 1px solid black;*/
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-primary-fade);
+}
+
+.ytech_icon
+{
+    width: 100px;
+    /*border: 1px solid black;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.ytech_icon button
+{
+    cursor: pointer;
+    font-size: var(--text-normal-size);
+    color: var(--color-secondary);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: var(--color-primary-fade);
+}
+
+.ytech_icon img
+{
+    width: 80px;
+}
+
+.second_stack
+{
+    /*border: 1px solid black;*/
+    flex-grow: 0;
+    font-size: var(--text-xs-size);
+    font-weight: bold;
+    color: var(--background-color);
+}
+
+.third_stack
+{
+    /*border: 1px solid black;*/
+    flex-grow: 0;
+    font-size: var(--text-normal-size);
+    font-weight: bold;
+    color: var(--background-color);
+}
+
+/* info */
+.modal_info
+{
+    /*border: 1px solid black;*/
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding);
+    gap: calc(var(--gap)/1);
+}
+
+.message
+{
+    border: 0.5px solid var(--color-primary);
+    background-color: var(--color-secondary-dark);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    font-weight: 500;
+    font-size: var(--text-s-size);
+}
+
+.message a
+{
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: var(--text-normal-size);
+}
+
+.message span
+{
+    color: var(--color-primary);
+}
+
+.separator
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(var(--gap)/2);
+    color: var(--text-gray);
+    font-size: var(--text-s-size);
+}
+
+.separator hr
+{
+    flex-grow: 1;
+    border: 1px solid var(--text-gray);
+    height: 0px;
+    margin: 0;
+}
+
+.modal_info button
+{
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius);
+    border: 1.2px solid var(--text-gray);
+    padding: var(--padding);
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap);
+    justify-content: center;
+}
+
+/* form */
+.modal_form
+{
+    /*border: 1px solid black;*/
+    flex-grow: 2;
+    padding: var(--padding);
+}
+
+form
+{
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--gap)*2/3);
+}
+
+.form_item label
+{
+    font-size: var(--text-normal-size);
+}
+
+/*Icons*/
+.card_input_container {
+    position: relative;
+}
+
+.card_icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-gray);
+    font-size: 18px;
+}
+
+.card_input_container:focus-within .card_icon
+{
+    color: var(--color-primary);
+}
+.card_number_input
+{
+    width: calc(100% - var(--padding)*4 - var(--padding));
+    font-size: 15px;
+    height: 15px;
+    padding: calc(var(--padding)*2) var(--padding) calc(var(--padding)*2) calc(var(--padding)*4);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--text-gray);
+}
+
+form input:focus, .pinput_item:focus
+{
+    outline: 2px solid var(--color-primary);
+}
+
+.pinput_item
+{
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 15px;
+    height: 15px;
+    padding: calc(var(--padding)*2);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--text-gray);
+}
+
+.form_item button
+{
+    width: 100%;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    padding: var(--padding);
+    margin-top: calc(var(--gap)*3);
+}

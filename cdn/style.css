@@ -1,0 +1,70 @@
+:root {
+  --color-primary: #6047ff;
+  --color-primary-fade: #7c68fc;
+  --color-secondary: #fff;
+  --color-secondary-dark: #dbd5f8;
+  --color-fade: #909090;
+  --text-black: #222222;
+  --text-gray: #acaaaa;
+  --border-color: #e9e9e9;
+  --padding: 0.6rem;
+  /* --background-color: #F1F5F9; */
+  --background-color: #fff;
+  --border: 1.5px solid var(--border-color);
+  --border-radius: 0.3rem;
+  --text-xs-size: 11px;
+  --text-s-size: 12px;
+  --text-normal-size: 14px;
+  --gap: 12px;
+}
+
+html, body {
+    background-color: var(--background-color);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    /* display: grid;
+    place-items: center; */
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+/* ========= Payment buttons =========*/
+/* Default Button */
+.payment_btn
+{
+    height: 40px;
+    width: 140px;
+    border-radius: var(--border-radius);
+    background-image: url("./assets/images/logo.svg");
+    background-position: center;
+    background-size: 50%, 75%;
+    background-repeat: no-repeat;
+    background-color: var(--color-secondary);
+    border: var(--border);
+}
+/* Hover effect */
+.payment_btn:hover
+{
+    cursor: pointer;
+}
+
+/* Outlined Button */
+.payment_btn.btn_outlined
+{
+    border: 2px solid var(--color-primary);
+}
+
+/* Filled Button */
+.payment_btn.btn_filled
+{
+    border: none;
+    background-image: url("./assets/images/logo_inverted.svg");
+    background-color: var(--color-primary);
+}
+
+/* Icon-like button */
+.payment_btn.btn_icon
+{
+    background-color: inherit;
+    border: none;
+}
