@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modal.css">
+    <!--    <script type="module" src="methods/main.js"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <!--       HEADER     -->
+    <div class="modal_box">
+        <div class="modal_header">
+            <div class="first_stack">
+                <div class="shop_icon"></div>
+                <div class="ytech_icon">
+                    <button>x</button>
+                    <img src="./assets/images/logo_inverted.svg" alt="">
+                </div>
+            </div>
+            <span class="second_stack">VEX SHOP</span>
+            <span class="third_stack">1000000 XOF</span>
+        </div>
+        <!--       YTECH MOBILE APP     -->
+        <div class="modal_info">
+            <div class="message">Pour continuer le processus de paiement, vous devez d'abord vous connecter depuis l'application <a href="#">YPAY</a>, puis generer un OTP de paiement d'une valeur de <span>1000000 XOF</span></div>
+            <div class="separator"> <hr> Je n'ai pas l'application <hr></div>
+            <div class="download_button">
+                <i class="fa fa-download download_icon" aria-hidden="true"></i>
+                <button>Telecharger l'application</button>
+            </div>
+        </div>
+        <!--       FORM     -->
+        <div class="modal_form">
+            <form action="#">
+                <div class="form_item">
+                    <label for="card_number">Numéro de la carte</label><br>
+                    <div class="card_input_container">
+                        <i class="fa fa-credit-card card_icon" aria-hidden="true"></i>
+                        <input id="card_number" class="card_number_input" type="text" autocomplete="off" placeholder="Enter your card number" required>
+                    </div>
+                </div>
+
+                <div class="form_item">
+                    <label for="otp_inputs" >Entrez le code OTP</label><br>
+                    <div id="otp_inputs" class="otp_inputs">
+                        <label>
+                            <input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required>
+                        </label>
+                        <label>
+                            <input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required>
+                        </label>
+                        <label>
+                            <input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required>
+                        </label>
+                        <label>
+                            <input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form_item">
+                    <button class="submit_button" type="submit">Valider</button>
+                </div>
+            </form>
+
+            <!--       SECURED MESSAGE     -->
+            <div class="secured_payment">
+                <i class="fa fa-lock secured_payment_icon" aria-hidden="true"></i>
+                <span >Paiement crypte et securise</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="module" src="methods/form_controller.js"></script>

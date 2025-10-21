@@ -11,6 +11,11 @@
     gap: calc(var(--gap)/2);
 }
 
+button:active
+{
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
 /* Screen width less than 425px */
 @media only screen and (max-width: 425px)
 {
@@ -159,7 +164,12 @@
     margin: 0;
 }
 
-.modal_info button
+.download_button
+{
+    position: relative;
+}
+
+.download_button button
 {
     background-color: var(--color-secondary);
     border-radius: var(--border-radius);
@@ -171,6 +181,14 @@
     flex-direction: row;
     gap: var(--gap);
     justify-content: center;
+    width: 100%;
+}
+
+.download_button .download_icon
+{
+    position: absolute;
+    right: calc(var(--gap)*2);
+    top: var(--gap);
 }
 
 /* form */
@@ -185,7 +203,13 @@ form
 {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--gap)*2/3);
+    gap: calc(var(--gap)*3/2);
+}
+.form_item
+{
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--gap)/3);
 }
 
 .form_item label
@@ -193,12 +217,13 @@ form
     font-size: var(--text-normal-size);
 }
 
-/*Icons*/
-.card_input_container {
+.card_input_container
+{
     position: relative;
 }
 
-.card_icon {
+.card_icon
+{
     position: absolute;
     left: 15px;
     top: 50%;
@@ -211,31 +236,32 @@ form
 {
     color: var(--color-primary);
 }
+
 .card_number_input
 {
     width: calc(100% - var(--padding)*4 - var(--padding));
     font-size: 15px;
     height: 15px;
-    padding: calc(var(--padding)*2) var(--padding) calc(var(--padding)*2) calc(var(--padding)*4);
+    padding: calc(var(--padding)*3/2) var(--padding) calc(var(--padding)*3/2) calc(var(--padding)*4);
     border-radius: var(--border-radius);
-    border: 1px solid var(--text-gray);
+    border: 1px solid var(--color-primary-fade);
 }
 
-form input:focus, .pinput_item:focus
+form input:focus, .otp_input_item:focus
 {
     outline: 2px solid var(--color-primary);
 }
 
-.pinput_item
+.otp_input_item
 {
     font-size: 24px;
     text-align: center;
     width: 100%;
     max-width: 15px;
     height: 15px;
-    padding: calc(var(--padding)*2);
+    padding: calc(var(--padding)*3/2);
     border-radius: var(--border-radius);
-    border: 1px solid var(--text-gray);
+    border: 1px solid var(--color-primary-fade);
 }
 
 .form_item button
@@ -246,7 +272,17 @@ form input:focus, .pinput_item:focus
     border-radius: var(--border-radius);
     border: none;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: bold;
     padding: var(--padding);
-    margin-top: calc(var(--gap)*3);
+    margin-top: var(--gap);
+}
+
+.secured_payment
+{
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap);
+    justify-content: center;
+    font-size: var(--text-normal-size);
+    margin-top: calc(var(--gap)*2);
 }
