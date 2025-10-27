@@ -1,7 +1,6 @@
 /* ===== Modal ==== */
 .modal_box
 {
-    /*border: 1px solid black;*/
     align-self: center;
     margin: auto;
     height: 99%;
@@ -40,7 +39,6 @@ button:active
 /* header */
 .modal_header
 {
-    /*border: 1px solid black;*/
     height: 110px;
     display: flex;
     flex-direction: column;
@@ -52,7 +50,6 @@ button:active
 
 .first_stack
 {
-    /*border: 1px solid black;*/
     flex-grow: 5;
     display: flex;
     flex-direction: row;
@@ -62,7 +59,6 @@ button:active
 /* logo, closing button and the icon */
 .shop_icon
 {
-    /*border: 1px solid black;*/
     width: 45px;
     height: 45px;
     padding: 10px;
@@ -73,7 +69,6 @@ button:active
 .ytech_icon
 {
     width: 100px;
-    /*border: 1px solid black;*/
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -95,11 +90,11 @@ button:active
 .ytech_icon img
 {
     width: 80px;
+    align-self: flex-end;
 }
 
 .second_stack
 {
-    /*border: 1px solid black;*/
     flex-grow: 0;
     font-size: var(--text-xs-size);
     font-weight: bold;
@@ -108,7 +103,6 @@ button:active
 
 .third_stack
 {
-    /*border: 1px solid black;*/
     flex-grow: 0;
     font-size: var(--text-normal-size);
     font-weight: bold;
@@ -118,7 +112,6 @@ button:active
 /* info */
 .modal_info
 {
-    /*border: 1px solid black;*/
     flex-grow: 0;
     display: flex;
     flex-direction: column;
@@ -292,5 +285,10 @@ form input:focus, .otp_input_item:focus
     gap: var(--gap);
     justify-content: center;
     font-size: var(--text-normal-size);
-    margin-top: calc(var(--gap)*2);
+    margin-top: calc(var(--gap)*1);
+}
+
+.secured_payment_icon
+{
+    color: var(--text-gray);
 }

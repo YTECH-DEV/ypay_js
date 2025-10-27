@@ -6,7 +6,8 @@ const disabled = "#E5E7EB";
 const cardPattern = /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
 
 // Main initialization function
-const initFormController = (container = document) => {
+const initFormController = (container = document) =>
+{
     // ============ DOM ELEMENT SELECTION ==========
     const form = container.querySelector("form");
     const card_number = container.querySelector("#card_number");
@@ -15,19 +16,24 @@ const initFormController = (container = document) => {
     const submit = container.querySelector(".submit_button");
 
     // Check if elements exist
-    if (!form || !card_number || !submit || otp_inputs.length === 0) {
+    if (!form || !card_number || !submit || otp_inputs.length === 0)
+    {
         console.error("Form elements not found");
         return;
     }
 
     // ======== METHODS =======
     // Submit button state
-    const submitState = (isFormValid) => {
-        if (isFormValid) {
+    const submitState = (isFormValid) =>
+    {
+        if (isFormValid)
+        {
             submit.disabled = false;
             submit.style.backgroundColor = primary_color;
             submit.style.cursor = "pointer";
-        } else {
+        }
+        else
+        {
             submit.disabled = true;
             submit.style.backgroundColor = disabled;
             submit.style.cursor = "not-allowed";
@@ -35,33 +41,42 @@ const initFormController = (container = document) => {
     };
 
     // Card number validations
-    const cardNumberValidation = () => {
+    const cardNumberValidation = () =>
+    {
         // Regex validation
-        if (cardPattern.test(card_number.value.toString())) {
+        if (cardPattern.test(card_number.value.toString()))
+        {
             card_number.style.outlineColor = primary_color;
-            if (card_number_icon) {
+            if (card_number_icon)
+            {
                 card_number_icon.style.color = primary_color;
             }
             card_number.style.border = `1px solid ${primary_color}`;
 
             const error_message_card_number = container.querySelector('.error-message');
-            if (error_message_card_number) {
+            if (error_message_card_number)
+            {
                 error_message_card_number.remove();
             }
 
             validateOTP();
 
-            if (card_number_icon) {
+            if (card_number_icon)
+            {
                 card_number_icon.style.top = "50%";
             }
-        } else {
+        }
+        else
+        {
             card_number.style.outlineColor = error_color;
-            if (card_number_icon) {
+            if (card_number_icon)
+            {
                 card_number_icon.style.color = error_color;
             }
             card_number.style.border = `1px solid ${error_color}`;
 
-            if (!container.querySelector('.error-message')) {
+            if (!container.querySelector('.error-message'))
+            {
                 const error_message_card_number = document.createElement("span");
                 error_message_card_number.className = "error-message";
                 error_message_card_number.textContent = "Enter XXXX-XXXX with letters/digits only";
@@ -71,7 +86,8 @@ const initFormController = (container = document) => {
                 error_message_card_number.style.marginTop = "4px";
                 error_message_card_number.style.display = "block";
 
-                if (card_number_icon) {
+                if (card_number_icon)
+                {
                     card_number_icon.style.top = "35%";
                 }
 
@@ -83,14 +99,19 @@ const initFormController = (container = document) => {
     };
 
     // OTP validation
-    const validateOTP = () => {
+    const validateOTP = () =>
+    {
         const allFilled = otp_inputs.every(input => input.value.length === 1);
 
-        otp_inputs.forEach(input => {
-            if (allFilled) {
+        otp_inputs.forEach(input =>
+        {
+            if (allFilled)
+            {
                 input.style.borderColor = primary_color;
                 input.style.outlineColor = primary_color;
-            } else if (input.value === '') {
+            }
+            else if (input.value === '')
+            {
                 input.style.borderColor = '';
             }
         });
@@ -100,16 +121,21 @@ const initFormController = (container = document) => {
     };
 
     // ======== OTP INPUT HANDLERS =======
-    const handleKeyDown = (e) => {
-        if (!/^[0-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && !e.metaKey && !e.ctrlKey) {
+    const handleKeyDown = (e) =>
+    {
+        if (!/^[0-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && !e.metaKey && !e.ctrlKey)
+        {
             e.preventDefault();
         }
 
-        if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (e.key === 'Delete' || e.key === 'Backspace')
+        {
             const index = otp_inputs.indexOf(e.target);
-            if (index >= 0) {
+            if (index >= 0)
+            {
                 otp_inputs[index].value = '';
-                if (index > 0) {
+                if (index > 0)
+                {
                     otp_inputs[index - 1].focus();
                 }
             }
@@ -118,28 +144,36 @@ const initFormController = (container = document) => {
         }
     };
 
-    const handleInput = (e) => {
+    const handleInput = (e) =>
+    {
         const { target } = e;
         const index = otp_inputs.indexOf(target);
-        if (target.value) {
-            if (index < otp_inputs.length - 1) {
+        if (target.value)
+        {
+            if (index < otp_inputs.length - 1)
+            {
                 otp_inputs[index + 1].focus();
-            } else {
+            }
+            else
+            {
                 submit.focus();
             }
         }
         validateOTP();
     };
 
-    const handleFocus = (e) => {
+    const handleFocus = (e) =>
+    {
         e.target.select();
     };
 
-    const handlePaste = (e) => {
+    const handlePaste = (e) =>
+    {
         e.preventDefault();
         const text = e.clipboardData.getData('text');
 
-        if (!new RegExp(`^[0-9]{${otp_inputs.length}}$`).test(text)) {
+        if (!new RegExp(`^[0-9]{${otp_inputs.length}}$`).test(text))
+        {
             return;
         }
         const digits = text.split('');
@@ -150,7 +184,8 @@ const initFormController = (container = document) => {
 
     // ======== LISTENERS =======
     // Card number listener
-    card_number.addEventListener("input", function(e) {
+    card_number.addEventListener("input", function(e)
+    {
         var value = card_number.value.toString().replace(/-/g, '');
 
         // Add hyphen after the first 4 characters
@@ -164,7 +199,9 @@ const initFormController = (container = document) => {
     });
 
     // OTP input listeners
-    otp_inputs.forEach((input) => {
+    otp_inputs.forEach((input) =>
+    {
+        console.log("--");
         input.addEventListener('paste', handlePaste);
         input.addEventListener('input', handleInput);
         input.addEventListener('keydown', handleKeyDown);
@@ -172,7 +209,8 @@ const initFormController = (container = document) => {
     });
 
     // Form submit handler
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) =>
+    {
         e.preventDefault();
 
         const cardNumber = card_number.value;
@@ -181,8 +219,8 @@ const initFormController = (container = document) => {
         submit.disabled = true;
         submit.textContent = "Processing...";
 
-        try {
-            // TODO: Call your transaction API here
+        try
+        {
             console.log('Submitting payment:', { cardNumber, otp });
 
             // Example:
@@ -219,6 +257,7 @@ const initFormController = (container = document) => {
 export default initFormController;
 
 // Also make it available globally for inline script usage
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined')
+{
     window.initFormController = initFormController;
 }

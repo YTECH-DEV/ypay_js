@@ -52,11 +52,18 @@ class Transaction
     {
         try
         {
-            const paymentResponse = await fetch("https://ypay.ytech-bf.com/api/v1/app/transactions/store-transfert",
+
+            // {
+            //     "amount": 500,
+            //     "card_code": "AAAA-0000",
+            //     "payment_code": 1234
+            // }
+            const paymentResponse = await fetch("https://ypay.ytech-bf.com/api/v1/project/make-payment",
                 {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer 293|y9BPlmt7uHOIcdRDg0Qd920cpa94KHdFNIOHx9GQ9c59895f"
                 },
                 body: JSON.stringify({
                     sender: this.sender,

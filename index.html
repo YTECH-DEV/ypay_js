@@ -7,21 +7,14 @@
     <link rel="stylesheet" href="./ui/styles/style.css">
 </head>
 <body>
-<h1>YPAY Payment Integration</h1>
 
-<!-- Example 1: Default styled button -->
 <button class="payment_btn btn_filled" data-amount="5000">
-    <!-- Logo will be shown automatically -->
 </button>
 
-<!-- Example 2: Custom button -->
-<button class="custom_payment_btn btn_outlined" data-amount="10000">
-    Pay 10000 XOF
-</button>
+<button class="custom_payment_btn btn_outlined" data-amount="10000">Pay 10000 XOF</button>
+<button class="custom_payment_btn btn_filled" data-amount="10000">Pay 10000 XOF</button>
 
-<!-- Example 3: Icon button -->
 <button class="payment_btn btn_icon" data-amount="2500">
-    <!-- Icon only -->
 </button>
 
 <script type="module">
@@ -39,13 +32,6 @@
 
     // Initialize button controller
     buttonController(paymentUI);
-
-    // Or trigger payment programmatically
-    // document.getElementById('custom-trigger')?.addEventListener('click', () =>
-    // {
-    //     paymentUI.triggerPayment(false, 15000)
-    //     paymentUI.renderForm();
-    // });
 </script>
 </body>
 </html>

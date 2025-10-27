@@ -1,6 +1,6 @@
 import YPAY from "../../ypay/ypay.js";
 import Local from "./local.js";
-import formController from './form_controller.js';
+import initFormController from './form_controller.js';
 
 
 class PaymentUI
@@ -19,11 +19,10 @@ class PaymentUI
             this.amount = 0;
             this.modal = false;
 
-            // Initialize YPAY once
             this.ypay = new YPAY(receiver, currency, shopName);
 
-            // Singleton pattern
-            if (PaymentUI.instance) {
+            if (PaymentUI.instance)
+            {
                 return PaymentUI.instance;
             }
 
@@ -93,7 +92,7 @@ class PaymentUI
     getFormTemplate()
     {
         const logoImg = this.logo ? `<img src="${this.logo}" alt="Shop Logo"/>` : '';
-        const closeBtn = this.modal ? '<button class="close_modal">×</button>' : '';
+        const closeBtn = this.modal ? '<button class="close_modal">×</button>' : '<div></div>';
 
         return `
         <!DOCTYPE html>
@@ -166,7 +165,10 @@ class PaymentUI
         
                     <!--       SECURED MESSAGE     -->
                     <div class="secured_payment">
-                        <i class="fa fa-lock secured_payment_icon"></i>
+                        <svg class="secured_payment_icon"  width="18px" height="18px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" color="#000000">
+                            <path d="M22 9V7C22 5.89543 21.1046 5 20 5H4C2.89543 5 2 5.89543 2 7V17C2 18.1046 2.89543 19 4 19H14M22 9H6M22 9V13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M21.1667 18.5H21.4C21.7314 18.5 22 18.7686 22 19.1V21.4C22 21.7314 21.7314 22 21.4 22H17.6C17.2686 22 17 21.7314 17 21.4V19.1C17 18.7686 17.2686 18.5 17.6 18.5H17.8333M21.1667 18.5V16.75C21.1667 16.1667 20.8333 15 19.5 15C18.1667 15 17.8333 16.1667 17.8333 16.75V18.5M21.1667 18.5H17.8333" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
                         <span>${Local.tag("secured_payment")}</span>
                     </div>
                 </div>
@@ -175,7 +177,6 @@ class PaymentUI
         </body>
         </html>
         
-        <script src="./ui/js/form_controller.js"></script>
         `;
     }
 
@@ -200,28 +201,7 @@ class PaymentUI
                     overlay.remove();
                 });
             }
-
-            // Close on overlay click
-            overlay.addEventListener('click', (e) =>
-            {
-                if (e.target === overlay)
-                {
-                    overlay.remove();
-                }
-            });
         }
-
-        // Initialize form controller after DOM is ready
-        setTimeout(() =>
-        {
-            import('./form_controller.js').then(module =>
-            {
-                if (module.default)
-                {
-                    module.default();
-                }
-            });
-        }, 100);
     }
 
     openNewTab()
@@ -241,7 +221,6 @@ class PaymentUI
 
     renderForm()
     {
-        console.log(this.modal)
         if (this.modal)
         {
             this.showModal();
@@ -251,7 +230,19 @@ class PaymentUI
             this.openNewTab();
         }
 
-        formController();
+        // Initialize form controller after DOM is ready
+        setTimeout(() =>
+        {
+            import('./form_controller.js').then(module =>
+            {
+                console.log(module);
+
+                if (module.default)
+                {
+                    module.default();
+                }
+            });
+        }, 100);
     }
 }
 
