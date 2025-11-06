@@ -45,23 +45,6 @@ class PaymentUI
         }
     }
 
-    async triggerPayment(card_code, otp, amount, modal)
-    {
-        this.modal = modal;
-        this.card_code = card_code;
-        this.amount = amount || 0.0;
-        this.otp = otp;
-        await this.ypay.createTransaction(this.card_code, this.amount, this.otp)
-        .then((data)=>
-        {
-            // alert for success message
-        }
-        ).catch((err)=>
-        {
-            // alert for error message
-        });
-    }
-
     // Validates the configurations
     _validate()
     {
@@ -78,6 +61,38 @@ class PaymentUI
         return errors.length > 0 ? new Error(errors.join("\n")) : null;
     }
 
+    async triggerPayment()
+    {
+        // fetches the card code
+        let card_code = document.getElementById("card_number").value;
+        // fetches the otp code
+        let otp = parseInt([...document.getElementsByClassName("otp_input_item")].map(elem => elem.value).join(""));
+        // changes the status of the submit button
+        let submit_button = document.getElementsByClassName("submit_button")
+        submit_button.innerHTML = this.localization.tag("submit_button_processing");
+        submit_button.disabled = true;
+
+
+        await this.ypay.createTransaction(card_code, this.amount, otp)
+            .then((data)=>
+            {
+                // alert for success message
+                document.getElementsByClassName("modal_box")[0].remove();
+
+
+            })
+            .catch((err)=>
+            {
+                document.getElementsByClassName("modal_box")[0].remove();
+                // alert for error message
+            });
+    }
+
+    showPopupMessage()
+    {
+
+    }
+
     // Gets the styles for the form
     getFormStyles()
     {
@@ -89,6 +104,11 @@ class PaymentUI
         return this.language === 'fr'
             ? `${this.amount} ${this.currency}`
             : `${this.currency} ${this.amount}`;
+    }
+
+    getFormScriptPath()
+    {
+        return "./ui/js/form_controller.js";
     }
 
     getFormTemplate()
@@ -141,7 +161,7 @@ class PaymentUI
                         <div class="form_item">
                             <label class="card_label" for="card_number">${this.localization.tag("card_label")}</label><br>
                             <div class="card_input_container">
-                                <svg class="card_icon" width="22px" height="22px" viewBox="0 0 22 22" stroke-width="1.5" fill="none">
+                                <svg class="card_icon" width="21px" height="22px" viewBox="0 0 22 22" stroke-width="1.5" fill="none">
                                     <path d="M22 9V17C22 18.1046 21.1046 19 20 19H4C2.89543 19 2 18.1046 2 17V7C2 5.89543 2.89543 5 4 5H20C21.1046 5 22 5.89543 22 7V9ZM22 9H6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     <path d="M16.5 13.3819C16.7654 13.1444 17.1158 13 17.5 13C18.3284 13 19 13.6716 19 14.5C19 15.3284 18.3284 16 17.5 16C17.1158 16 16.7654 15.8556 16.5 15.6181" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     <path d="M16.5 13.3819C16.2346 13.1444 15.8842 13 15.5 13C14.6716 13 14 13.6716 14 14.5C14 15.3284 14.6716 16 15.5 16C15.8842 16 16.2346 15.8556 16.5 15.6181" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -175,7 +195,7 @@ class PaymentUI
                     </div>
                 </div>
             </div>
-           
+           <script type="module" src="${this.getFormScriptPath()}"></script>
         </body>
         </html>
         
@@ -192,7 +212,7 @@ class PaymentUI
         // Add to body
         document.body.appendChild(overlay);
 
-        // Add close button handler if modal
+        // Add close button handler
         if (this.modal)
         {
             const closeBtn = overlay.querySelector('.close_modal');
@@ -237,7 +257,6 @@ class PaymentUI
         {
             import('./form_controller.js').then(module =>
             {
-
                 if (module.default)
                 {
                     module.default();

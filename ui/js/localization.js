@@ -21,6 +21,8 @@ class Localization
                 submit_button: "Submit",
                 error_message: "Enter XXXX-XXXX with letters/digits only.",
                 secured_payment: "Encrypted and Secured Payment",
+                successful_transaction: "Your transaction was successfully processed!",
+                failure_transaction: "Your transaction has not been processed!",
             },
             fr: {
                 card_label: "Numéro de carte",
@@ -33,6 +35,8 @@ class Localization
                 no_app: "Je n'ai pas l'application",
                 error_message: "Format XXXX-XXXX avec lettres et chiffres uniquement.",
                 secured_payment: "Paiement crypté et sécurisé",
+                successful_transaction: "Votre transaction a été traitée avec succès!",
+                failure_transaction: "Votre transaction n'a pas pu être traitée!"
             }
         };
     }
