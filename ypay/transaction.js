@@ -2,12 +2,13 @@ import {cardPattern, paymentCodePattern, tokenPattern} from "./patterns.js";
 
 class Transaction
 {
-    constructor(token = "", sender = "", otp = "", amount = 0, handlers = {}) 
+    constructor(token = "", sender = "", otp = "", amount = 0, language = "en", handlers = {})
     {
         this.sender = sender;
         this.token = token;
         this.otp = otp;
         this.amount = parseFloat(amount.toString());
+        this.language = language;
 
         this.paymentHandlers =
         {
@@ -59,6 +60,11 @@ class Transaction
             errors.push("Amount must be a positive number.");
         }
 
+        if (!["en", "fr"].includes(this.language.toString().toLowerCase()))
+        {
+            errors.push("Language is invalid.");
+        }
+
         return errors.length > 0 ? new Error(errors.join("\n")) : null;
     }
 
@@ -77,9 +83,11 @@ class Transaction
                 "https://ypay.ytech-bf.com/api/v1/project/make-payment",
                 {
                     method: "POST",
+                    mode: "cors",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${this.token}`
+                        "Authorization": `Bearer ${this.token}`,
+                        "accept-language" : this.language,
                     },
                     body: JSON.stringify({
                         card_code: this.sender,
@@ -100,7 +108,7 @@ class Transaction
             // Handle HTTP errors
             const errorData = await paymentResponse.json().catch(() => ({}));
             const errorMessage = errorData.message || paymentResponse.statusText || "Payment failed";
-            throw new Error(`Payment failed (${paymentResponse.status}): ${errorMessage}`);
+            throw new Error(`${paymentResponse.status}\n${errorMessage}`);
         }
         catch (error)
         {

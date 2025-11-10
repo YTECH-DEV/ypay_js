@@ -238,7 +238,7 @@ form
     color: var(--color-primary);
 }
 
-.card_number_input
+.card_code_input
 {
     width: calc(100% - var(--padding)*4 - var(--padding));
     font-size: 15px;

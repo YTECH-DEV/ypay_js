@@ -1,0 +1,116 @@
+.alert-overlay
+{
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 2147483647 !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(1px) !important;
+    font-family: var(--font-family)!important;
+}
+
+.alert
+{
+    padding: var(--gap);
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius);
+    background-color: white;
+    z-index: 2147483647 !important;
+}
+
+.alert h2
+{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    padding-right: 30px;
+}
+
+.alert p
+{
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Close button positioning */
+.close
+{
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-secondary);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: bold;
+    z-index: 2147483647 !important;
+}
+
+
+.alert-success .close
+{
+    background-color: var(--color-primary);
+}
+
+.alert-failure .close
+{
+    background-color: var(--color-failure);
+}
+
+/* Alert's button */
+.alert button
+{
+    color: white;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    padding: var(--padding);
+    font-size: 14px;
+    align-self: flex-end;
+    margin-top: 2px;
+}
+
+/* Success buttons */
+.alert-success
+{
+    border: 2px solid var(--color-primary);
+}
+
+.alert-success button
+{
+    background-color: var(--color-primary);
+}
+
+/* Failure buttons */
+.alert-failure button
+{
+    background-color: var(--color-failure);
+}
+
+.alert-failure
+{
+    border: 2px solid var(--color-failure);
+}

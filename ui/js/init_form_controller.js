@@ -1,22 +1,22 @@
+import {cardPattern} from "../../ypay/patterns.js";
+
 const primary_color = "#6047FF";
 const error_color = "#FF0000";
 const disabled = "#E5E7EB";
 
-// ===== Regex pattern for credit card number validation =====
-const cardPattern = /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
 
 // Main initialization function
-const initFormController = (container = document) =>
+const initFormController = (targetDocument = document) =>
 {
     // ============ DOM ELEMENT SELECTION ==========
-    const form = container.querySelector("form");
-    const card_number = container.querySelector("#card_number");
-    const card_number_icon = container.querySelector(".card_icon");
-    const otp_inputs = [...container.querySelectorAll(".otp_input_item")];
-    const submit = container.querySelector(".submit_button");
+    const form = targetDocument.querySelector("form");
+    const card_code = targetDocument.querySelector("#card_code");
+    const card_number_icon = targetDocument.querySelector(".card_icon");
+    const otp_inputs = [...targetDocument.querySelectorAll(".otp_input_item")];
+    const submit = targetDocument.querySelector(".submit_button");
 
     // Check if elements exist
-    if (!form || !card_number || !submit || otp_inputs.length === 0)
+    if (!form || !card_code || !submit || otp_inputs.length === 0)
     {
         console.error("Form elements not found");
         return;
@@ -44,16 +44,16 @@ const initFormController = (container = document) =>
     const cardNumberValidation = () =>
     {
         // Regex validation
-        if (cardPattern.test(card_number.value.toString()))
+        if (cardPattern.test(card_code.value.toString()))
         {
-            card_number.style.outlineColor = primary_color;
+            card_code.style.outlineColor = primary_color;
             if (card_number_icon)
             {
                 card_number_icon.style.color = primary_color;
             }
-            card_number.style.border = `1px solid ${primary_color}`;
+            card_code.style.border = `1px solid ${primary_color}`;
 
-            const error_message_card_number = container.querySelector('.error-message');
+            const error_message_card_number = targetDocument.querySelector('.error-message');
             if (error_message_card_number)
             {
                 error_message_card_number.remove();
@@ -68,16 +68,16 @@ const initFormController = (container = document) =>
         }
         else
         {
-            card_number.style.outlineColor = error_color;
+            card_code.style.outlineColor = error_color;
             if (card_number_icon)
             {
                 card_number_icon.style.color = error_color;
             }
-            card_number.style.border = `1px solid ${error_color}`;
+            card_code.style.border = `1px solid ${error_color}`;
 
-            if (!container.querySelector('.error-message'))
+            if (!targetDocument.querySelector('.error-message'))
             {
-                const error_message_card_number = document.createElement("span");
+                const error_message_card_number = targetDocument.createElement("span");
                 error_message_card_number.className = "error-message";
                 error_message_card_number.textContent = "Enter XXXX-XXXX with letters/digits only";
                 error_message_card_number.style.color = error_color;
@@ -91,7 +91,7 @@ const initFormController = (container = document) =>
                     card_number_icon.style.top = "35%";
                 }
 
-                card_number.parentNode.appendChild(error_message_card_number);
+                card_code.parentNode.appendChild(error_message_card_number);
             }
 
             submitState(false);
@@ -116,7 +116,7 @@ const initFormController = (container = document) =>
             }
         });
 
-        const isCardValid = cardPattern.test(card_number.value);
+        const isCardValid = cardPattern.test(card_code.value);
         submitState(isCardValid && allFilled);
     };
 
@@ -184,80 +184,36 @@ const initFormController = (container = document) =>
 
     // ======== LISTENERS =======
     // Card number listener
-    card_number.addEventListener("input", function(e)
+    card_code.addEventListener("input", function(e)
     {
-        var value = card_number.value.toString().replace(/-/g, '');
+        let value = card_code.value.toString().replace(/-/g, '');
 
         // Add hyphen after the first 4 characters
-        if (value.length > 4) {
+        if (value.length > 4)
+        {
             value = value.slice(0, 4) + '-' + value.slice(4);
         }
 
         // Limit to 9 characters (XXXX-XXXX)
-        card_number.value = value.slice(0, 9);
+        card_code.value = value.slice(0, 9);
         cardNumberValidation();
     });
 
     // OTP input listeners
     otp_inputs.forEach((input) =>
     {
-        console.log("--");
         input.addEventListener('paste', handlePaste);
         input.addEventListener('input', handleInput);
         input.addEventListener('keydown', handleKeyDown);
         input.addEventListener('focus', handleFocus);
     });
 
-    // Form submit handler
-    form.addEventListener('submit', async (e) =>
-    {
-        e.preventDefault();
-
-        const cardNumber = card_number.value;
-        const otp = otp_inputs.map(input => input.value).join('');
-
-        submit.disabled = true;
-        submit.textContent = "Processing...";
-
-        try
-        {
-            console.log('Submitting payment:', { cardNumber, otp });
-
-            // Example:
-            // const transaction = ypay.createTransaction(cardNumber, amount);
-            // await transaction.exec();
-
-        } catch (error) {
-            console.error('Payment failed:', error);
-            alert('Payment failed. Please try again.');
-        } finally {
-            submit.disabled = false;
-            submit.textContent = "Submit";
-        }
-    });
 
     // Initialize
     submit.disabled = true;
     submitState(false);
 
-    return {
-        cleanup: () => {
-            // Remove event listeners if needed
-            otp_inputs.forEach((input) => {
-                input.removeEventListener('paste', handlePaste);
-                input.removeEventListener('input', handleInput);
-                input.removeEventListener('keydown', handleKeyDown);
-                input.removeEventListener('focus', handleFocus);
-            });
-        }
-    };
 };
 
 // Export for module usage
 export default initFormController;
-
-// Also make it available globally for inline script usage
-if (typeof window !== 'undefined')
-{
-    window.initFormController = initFormController;
-}

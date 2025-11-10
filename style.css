@@ -1,14 +1,16 @@
-html, body {
+html, body
+{
     background-color: #F1F5F9;
     height: 100%;
     width: 100%;
     margin: 0;
     display: grid;
     place-items: center;
-    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-family: var(--font-family);
 }
 
-.wrapper {
+.wrapper
+{
     height: 96%;
     width: 30%;
     display: flex;
@@ -17,19 +19,22 @@ html, body {
     justify-content: space-between;
 }
 
-.gateway_header {
+.gateway_header
+{
     flex: 2;
     text-align: center;
 }
 
-.gateway_form {
+.gateway_form
+{
     flex: 6;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.gateway_buttons {
+.gateway_buttons
+{
     flex: 2;
     display: flex;
     flex-direction: column;
@@ -37,33 +42,38 @@ html, body {
     text-align: center;
 }
 
-.text_theme {
+.text_theme
+{
     color: #6047FF;
     text-align: center;
     font-size: 32px;
     font-weight: bold;
 }
 
-span {
+span
+{
     color: #7D7E80;
     font-size: 14px;
     display: block;
     margin-top: 6px;
 }
 
-a {
+a
+{
     text-decoration: none;
     color: black;
 }
 
-.pinput {
+.pinput
+{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 50%;
 }
 
-form {
+form
+{
     flex: 3;
     display: flex;
     flex-direction: column;
@@ -80,7 +90,7 @@ form {
     height: 20px;
 }
 
-.card_number_input 
+.card_code_inout 
 {
     width: calc(100% - 20px);
     font-size: 20px;

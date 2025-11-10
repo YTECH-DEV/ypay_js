@@ -29,13 +29,14 @@ class YPAY
     }
 
     // create a transaction and execute it
-    createTransaction(card_code, otp, amount, handlers = {})
+    createTransaction(card_code, otp, amount, language, handlers = {})
     {
         return new Transaction(
             this.token,
             card_code,
             otp,
             amount,
+            language,
             handlers
         ).exec();
     }

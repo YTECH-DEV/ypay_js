@@ -6,3 +6,5 @@
 @import url("./form.css");
 /*modal styles*/
 @import url("./modal.css");
+/*alert styles*/
+@import url("custom_alert.css");

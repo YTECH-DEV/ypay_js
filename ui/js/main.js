@@ -1,5 +1,5 @@
 import PaymentUI from "./paymentUI.js";
-import buttonController from "./button_controller.js";
+import buttonController from "./paymentTriggerButtons.js";
 
 buttonController();
 
