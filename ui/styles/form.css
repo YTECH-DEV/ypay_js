@@ -69,6 +69,8 @@ button:active
 .shop_icon img
 {
     object-fit: contain;
+    max-height:100%;
+    max-width:100%;
 }
 
 .ytech_icon
