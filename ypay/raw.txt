@@ -1,6 +1,0 @@
-// {
-//     "amount": 500,
-//     "card_code": "AAAA-0000",
-//     "payment_code": 1234
-// // 293|y9BPlmt7uHOIcdRDg0Qd920cpa94KHdFNIOHx9GQ9c59895f
-// }

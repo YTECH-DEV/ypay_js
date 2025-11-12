@@ -1,4 +1,4 @@
-import YPAY from "../../ypay/ypay.js";
+import YPAY from "../../sdk/ypay.js";
 import Localization from "./localization.js";
 
 class PaymentUI

@@ -1,4 +1,4 @@
-import {cardPattern} from "../../ypay/patterns.js";
+import {cardPattern} from "../../sdk/patterns.js";
 
 const primary_color = "#6047FF";
 const error_color = "#FF0000";

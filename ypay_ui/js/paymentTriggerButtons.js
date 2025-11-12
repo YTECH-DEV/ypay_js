@@ -12,7 +12,7 @@ const paymentTriggerButtons = () =>
             const amount = btn.dataset.amount || 0; // gets the amount attached to the button
             const modal = btn.dataset.modal || false; // get the type of form to display
 
-            // retrieves the payment ui singleton
+            // retrieves the payment ypay_ui singleton
             let paymentUIInstance = PaymentUI.instance;
             // affects the buttons parameters to the payment instance
             paymentUIInstance.amount = parseFloat(amount);
