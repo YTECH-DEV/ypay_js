@@ -3,8 +3,13 @@ import Localization from "./localization.js";
 
 class PaymentUI
 {
+    static instance;
     constructor(token, currency, language, handlers = {}, shopName, logo)
     {
+        if (PaymentUI.instance)
+        {
+            return PaymentUI.instance;
+        }
         this.logo = logo || '';
         this.language = language || 'en';
         this.shopName = shopName || 'Unknown';
@@ -30,11 +35,23 @@ class PaymentUI
 
         this.ypay = new YPAY(token, currency, shopName);
 
-        if (PaymentUI.instance)
-        {
-            return PaymentUI.instance;
-        }
         PaymentUI.instance = this;
+        return this;
+    }
+
+    toString()
+    {
+        return `PaymentUI 
+        {
+          shopName: "${this.shopName}",
+          currency: "${this.currency}",
+          language: "${this.language}",
+          token: "${this.token ? this.token.substring(0, 8) + '...' : 'none'}",
+          amount: ${this.amount},
+          modal: ${this.modal},
+          hasLogo: ${!!this.logo},
+          handlers: ${Object.keys(this.handlers).join(', ')}
+        }`;
     }
 
     _validate()
@@ -226,6 +243,7 @@ class PaymentUI
     // fetches language data and parameters for the form
     getTemplateData()
     {
+        console.log(this.logo)
         return {
             language: this.language, // language
             logoImg: this.logo ? `<img src="${this.logo}" alt="Shop Logo"/>` : '', // logo
@@ -248,6 +266,9 @@ class PaymentUI
     renderTemplate(template)
     {
         const data = this.getTemplateData();
+
+        console.log(data.shopName)
+        console.log(this.shopName)
 
         return template
             .replace(/\{\{language\}\}/g, data.language)

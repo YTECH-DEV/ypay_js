@@ -66,6 +66,11 @@ button:active
     background-color: var(--color-primary-fade);
 }
 
+.shop_icon img
+{
+    object-fit: contain;
+}
+
 .ytech_icon
 {
     width: 100px;

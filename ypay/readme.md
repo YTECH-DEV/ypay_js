@@ -7,10 +7,11 @@ const token = "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900" // amount r
 const card_code = "sdsp-ndor" // sender's card code
 const otp = "1234" // genereated OTP for the transaction
 const amount = 3000 // amount of the transaction
+const language = "en" // language: `en` for `English` and `fr` for Fre`nch
 ```
 ## Usage Example 1: Check validation before executing
 ```js
-const transaction1 = new Transaction(token, card_code, otp, amount);
+const transaction1 = new Transaction(token, card_code, otp, amount, language);
 
 if (!transaction1.isValid())
 {
@@ -35,7 +36,7 @@ const showErrorMessage = (data)
 {
     // statements
 }
-const transaction2 = new Transaction(token, card_code, otp, amount,
+const transaction2 = new Transaction(token, card_code, otp, amount, language,
     {
     onSuccess: (data) => showSuccessMessage(data),  // callback when the operation is done sucessfully
     onFailure: (error) => showErrorMessage(error) // callback when an error occurred

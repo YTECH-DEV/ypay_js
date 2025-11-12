@@ -13,7 +13,8 @@ const paymentTriggerButtons = () =>
             const modal = btn.dataset.modal || false; // get the type of form to display
 
             // retrieves the payment ui singleton
-            let paymentUIInstance = new PaymentUI();
+            let paymentUIInstance = PaymentUI.instance;
+            console.log(paymentUIInstance.toString());
             // affects the buttons parameters to the payment instance
             paymentUIInstance.amount = parseFloat(amount);
             paymentUIInstance.modal = modal;
