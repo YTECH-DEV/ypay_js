@@ -14,7 +14,6 @@ const paymentTriggerButtons = () =>
 
             // retrieves the payment ui singleton
             let paymentUIInstance = PaymentUI.instance;
-            console.log(paymentUIInstance.toString());
             // affects the buttons parameters to the payment instance
             paymentUIInstance.amount = parseFloat(amount);
             paymentUIInstance.modal = modal;

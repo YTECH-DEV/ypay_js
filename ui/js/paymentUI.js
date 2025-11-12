@@ -74,6 +74,29 @@ class PaymentUI
         }
     }
 
+    _getTargetDocument()
+    {
+        if (this.overlayElement)
+        {
+            return document;
+        }
+        if (this.newWindowRef && !this.newWindowRef.closed)
+        {
+            try
+            {
+                if (this.newWindowRef.document)
+                {
+                    return this.newWindowRef.document;
+                }
+            }
+            catch (error)
+            {
+                console.warn('Cannot access popup window document:', error.message);
+            }
+        }
+        return document;
+    }
+
     // close the payment form
     closePaymentUI()
     {
@@ -129,10 +152,15 @@ class PaymentUI
 
                 const close = () =>
                 {
-                    if (this.alert && this.alert.parentNode) {
+                    if (this.alert && this.alert.parentNode)
+                    {
                         this.alert.parentNode.removeChild(this.alert);
                         this.alert = null;
                     }
+
+
+                    let submit_btn = this._getTargetDocument().getElementsByClassName("submit_button")[0]
+                    submit_btn.innerHTML = this.localization.tag("submit_button")
                 }
 
                 closingButton.addEventListener("click", close);
@@ -142,12 +170,6 @@ class PaymentUI
             {
                 console.error('Failed to load alert template:', err);
             });
-    }
-
-    // show the pop-up message
-    showPopupMessage(type, data)
-    {
-        this.customAlert(type, data);
     }
 
     // format the amount according to the language set
@@ -243,7 +265,6 @@ class PaymentUI
     // fetches language data and parameters for the form
     getTemplateData()
     {
-        console.log(this.logo)
         return {
             language: this.language, // language
             logoImg: this.logo ? `<img src="${this.logo}" alt="Shop Logo"/>` : '', // logo
@@ -266,9 +287,6 @@ class PaymentUI
     renderTemplate(template)
     {
         const data = this.getTemplateData();
-
-        console.log(data.shopName)
-        console.log(this.shopName)
 
         return template
             .replace(/\{\{language\}\}/g, data.language)
@@ -336,7 +354,7 @@ class PaymentUI
 
             const data = await this.ypay.createTransaction(card_code, this.amount, otp, this.localization.current);
 
-            this.showPopupMessage('success', data);
+            this.customAlert('success', data);
             this.closePaymentUI();
 
             if (this.handlers.onSuccess)
@@ -348,7 +366,7 @@ class PaymentUI
         catch (err)
         {
             console.error('Payment error:', err);
-            this.showPopupMessage('failure', err);
+            this.customAlert('failure', err);
             if (this.handlers.onFailure)
             {
                 this.handlers.onFailure(err);
