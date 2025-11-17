@@ -134,13 +134,13 @@ paymentUI.renderForm();
 ```
 ```js
     let customButton = document.getElementById("custom")
-customButton.addEventListener("click", function (event)
+    customButton.addEventListener("click", function (event)
     {
         event.preventDefault();
         // retrieves the payment ypay_ui singleton from previous instance
         let paymentUIInstance = PaymentUI.instance;
         // affects the buttons parameters to the payment instance
-        paymentUIInstance.amount = 50000;
+        paymentUIInstance.amount = 50000;// amount example for the payment
         paymentUIInstance.modal = true;
         paymentUIInstance.renderForm();
     })
