@@ -132,7 +132,7 @@ class PaymentUI
 
     customAlert(type, message)
     {
-        fetch("./ui/templates/custom_alert.html")
+        fetch("./ypay_ui/templates/custom_alert.html")
             .then(response => response.text())
             .then(template =>
             {
@@ -184,7 +184,7 @@ class PaymentUI
     showModal()
     {
         // Load and render template
-        fetch('./ui/templates/payment_form.html')
+        fetch('./ypay_ui/templates/payment_form.html')
             .then(response => response.text())
             .then(template =>
             {
@@ -233,7 +233,7 @@ class PaymentUI
     // opens a new tab for the form
     openNewTab()
     {
-        fetch('./ui/templates/payment_form.html')
+        fetch('./ypay_ui/templates/payment_form.html')
             .then(response => response.text())
             .then(template =>
             {
