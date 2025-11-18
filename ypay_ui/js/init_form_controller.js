@@ -10,6 +10,7 @@ const initFormController = (targetDocument = document) =>
 {
     // ============ DOM ELEMENT SELECTION ==========
     const form = targetDocument.querySelector("form");
+    const app_button = targetDocument.querySelector("#app_button");
     const card_code = targetDocument.querySelector("#card_code");
     const card_number_icon = targetDocument.querySelector(".card_icon");
     const otp_inputs = [...targetDocument.querySelectorAll(".otp_input_item")];
@@ -206,6 +207,12 @@ const initFormController = (targetDocument = document) =>
         input.addEventListener('input', handleInput);
         input.addEventListener('keydown', handleKeyDown);
         input.addEventListener('focus', handleFocus);
+    });
+
+    app_button.addEventListener("click", (e)=>
+    {
+        e.preventDefault();
+        window.open("https://ypay.ytech-bf.com/")
     });
 
 

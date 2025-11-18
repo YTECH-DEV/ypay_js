@@ -24,14 +24,14 @@ YPAY is a comprehensive payment gateway solution that provides both programmatic
 │   ├── templates/
 │   │   ├── payment_form.html           # Payment form template
 │   │   └── custom_alert.html           # Alert template
-│   │── styles/
+│   ├── styles/
 │   │   ├── buttons.css                 # styles for ypay buttons
 │   │   ├── custom_alert.css            # styles for custom alerts for notifications
 │   │   ├── form.css                    # styles for the form
 │   │   ├── modal.css                   # styles for the main overlay of the form
 │   │   ├── root.css                    # global style variables
 │   │   └── style.css                   # main file gathering all css files
-│   │── js/
+│   ├── js/
 │   │   ├── paymentUI.js                # UI controller
 │   │   ├── localization.js             # Language management
 │   │   ├── init_form_controller.js     # Form validation & interactions
@@ -40,6 +40,10 @@ YPAY is a comprehensive payment gateway solution that provides both programmatic
 │   │   └── main.js                     # Entry point
 ```
 
+---
+
+## API Reference
+
 ### 3. PaymentUI Class
 Manages the payment interface with modal or new tab display options.
 
@@ -47,22 +51,35 @@ Manages the payment interface with modal or new tab display options.
 ```js
 import PaymentUI from "path/to/ypay_ui/paymentUI.js";
 
-const paymentUI = new PaymentUI(token, currency, language, handlers, shopName, logo);
+const paymentUI = new PaymentUI(
+    token, 
+    currency, 
+    language, 
+    handlers, 
+    showDialogs, 
+    verbose, 
+    shopName, 
+    logo
+);
 ```
 > **The instance of PaymentUI should be created only once.**
 
 **Parameters:**
-- `token` (string): API token
-- `currency` (string): Currency code. Default: "XOF"
-- `language` (string): "en" or "fr". Default: "en"
-- `handlers` (object): Success/failure callbacks
-- `shopName` (string): Display name. Default: "Unknown"
-- `logo` (string): Logo image URL. Default: ""
+- `token` (string, required): API token
+- `currency` (string): Currency code. Default: `"XOF"`
+- `language` (string): Interface language ("en" or "fr"). Default: `"en"`
+- `handlers` (object): Success/failure callbacks. Default: `{}`
+- `showDialogs` (boolean): Show UI alert dialogs for success/failure. Default: `true`
+- `verbose` (boolean): Enable console logging for debugging. Default: `true`
+- `shopName` (string): Display name. Default: `"Unknown"`
+- `logo` (string): Logo image URL. Default: `""`
 
 #### Properties
 ```js
 paymentUI.amount = 5000;        // Set transaction amount
 paymentUI.modal = true;         // true = modal, false = new tab
+paymentUI.showDialogs = false;  // Control UI alerts
+paymentUI.verbose = true;       // Control console logging
 ```
 
 #### Methods
@@ -77,6 +94,58 @@ paymentUI.renderForm();
 Closes the payment form.
 ```js
 paymentUI.closePaymentUI();
+```
+
+**formatAmount()**
+Formats amount according to language setting.
+```js
+const formatted = paymentUI.formatAmount();
+// French: "5000 XOF"
+// English: "XOF 5000"
+```
+
+**toString()**
+Returns string representation for debugging.
+```js
+console.log(paymentUI.toString());
+// Output: PaymentUI { shopName: "...", currency: "...", ... }
+```
+
+#### Configuration Options
+
+**Verbose Mode (`verbose`)**
+- `true`: Logs all operations to console (initialization, form opening, payment processing, success/failure)
+- `false`: Silent mode, no console output
+
+```js
+// Enable detailed logging
+const payment = new PaymentUI(token, "XOF", "en", {}, true, true);
+
+// Silent mode
+const payment = new PaymentUI(token, "XOF", "en", {}, true, false);
+```
+
+**Show Dialogs (`showDialogs`)**
+- `true`: Displays success/error alert dialogs in the UI
+- `false`: Only triggers callbacks, no UI alerts (messages logged to console if verbose is enabled)
+
+```js
+// Show UI dialogs for success/failure
+const payment = new PaymentUI(token, "XOF", "en", {}, true, true);
+
+// No UI dialogs, callbacks only
+const payment = new PaymentUI(token, "XOF", "en", {}, false, true);
+```
+
+**Singleton Pattern**
+PaymentUI uses a singleton pattern. Multiple instantiations return the same instance:
+```js
+const payment1 = new PaymentUI(token, "XOF", "en");
+const payment2 = new PaymentUI(token, "XOF", "en");
+console.log(payment1 === payment2); // true
+
+// Access existing instance
+const existingInstance = PaymentUI.instance;
 ```
 
 ---
@@ -119,6 +188,8 @@ const paymentUI = new PaymentUI(
         onSuccess: (data) => alert("Payment successful!"),
         onFailure: (error) => alert("Payment failed!")
     },
+    true,  // showDialogs
+    true,  // verbose
     "My Shop",
     "./logo.png"
 );
@@ -128,22 +199,22 @@ paymentUI.modal = true;
 paymentUI.renderForm();
 ```
 
-### Method 3: Custom button integration
+### Method 3: Custom Button Integration
 ```html
 <button id="custom">Custom button</button>
 ```
 ```js
-    let customButton = document.getElementById("custom")
-    customButton.addEventListener("click", function (event)
-    {
-        event.preventDefault();
-        // retrieves the payment ypay_ui singleton from previous instance
-        let paymentUIInstance = PaymentUI.instance;
-        // affects the buttons parameters to the payment instance
-        paymentUIInstance.amount = 50000;// amount example for the payment
-        paymentUIInstance.modal = true;
-        paymentUIInstance.renderForm();
-    })
+let customButton = document.getElementById("custom");
+customButton.addEventListener("click", function (event)
+{
+    event.preventDefault();
+    // Retrieves the payment ypay_ui singleton from previous instance
+    let paymentUIInstance = PaymentUI.instance;
+    // Affects the button's parameters to the payment instance
+    paymentUIInstance.amount = 50000; // Amount example for the payment
+    paymentUIInstance.modal = true;
+    paymentUIInstance.renderForm();
+});
 ```
 
 ---
@@ -206,11 +277,11 @@ await ypay.createTransaction(
 );
 ```
 
-### Example 3: Complete UI Integration
+### Example 3: Complete UI Integration with Full Configuration
 ```js
 import PaymentUI from "path/to/ypay_ui/paymentUI.js";
 
-// Initialize payment UI
+// Initialize payment UI with all options
 const paymentUI = new PaymentUI(
     "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900",
     "XOF",
@@ -225,16 +296,68 @@ const paymentUI = new PaymentUI(
             alert("Payment failed. Please try again.");
         }
     },
+    true,  // showDialogs - display success/error alerts
+    true,  // verbose - enable console logging
     "Mon Magasin",
     "path/to/assets/logo.png"
 );
 ```
 
+### Example 4: Silent Mode (No Dialogs, No Logs)
+```js
+import PaymentUI from "path/to/ypay_ui/paymentUI.js";
+
+// Silent payment processing with callbacks only
+const paymentUI = new PaymentUI(
+    "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900",
+    "XOF",
+    "en",
+    {
+        onSuccess: (data) => {
+            // Custom success handling without dialogs
+            redirectToThankYouPage(data);
+        },
+        onFailure: (error) => {
+            // Custom error handling without dialogs
+            showCustomErrorMessage(error);
+        }
+    },
+    false,  // No UI dialogs
+    false,  // No console logs
+    "My Shop"
+);
+
+paymentUI.amount = 10000;
+paymentUI.modal = true;
+paymentUI.renderForm();
+```
+
+### Example 5: Development Mode (Verbose Logging, No Dialogs)
+```js
+import PaymentUI from "path/to/ypay_ui/paymentUI.js";
+
+// For debugging: logs enabled, but no UI interruptions
+const paymentUI = new PaymentUI(
+    "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900",
+    "XOF",
+    "en",
+    {
+        onSuccess: (data) => console.log("Success:", data),
+        onFailure: (error) => console.error("Failure:", error)
+    },
+    false,  // No UI dialogs - cleaner testing
+    true,   // Verbose logs - see everything in console
+    "Test Shop"
+);
+
+paymentUI.amount = 500;
+paymentUI.modal = true;
+paymentUI.renderForm();
+```
+
 ---
 
-## API Reference
-
-### Validation Patterns
+## Validation Patterns
 
 ```js
 import { cardPattern, paymentCodePattern, tokenPattern } from "path/to/sdk/patterns.js";
@@ -371,6 +494,19 @@ if (isNaN(amount) || amount <= 0)
     alert("Invalid amount");
     return;
 }
+```
+
+### 5. Configuration for Different Environments
+
+```js
+// Production: Show dialogs, no verbose logs
+const prodPayment = new PaymentUI(token, "XOF", "en", handlers, true, false);
+
+// Development: Show logs, no dialogs
+const devPayment = new PaymentUI(token, "XOF", "en", handlers, false, true);
+
+// Testing: Silent mode
+const testPayment = new PaymentUI(token, "XOF", "en", handlers, false, false);
 ```
 
 ---

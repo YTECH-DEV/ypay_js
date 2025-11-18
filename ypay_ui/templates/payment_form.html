@@ -26,7 +26,7 @@
         <div class="message">{{texts.message}} <a>{{amount}}</a></div>
         <div class="separator"> <hr> {{texts.no_app}} <hr></div>
         <div class="download_button">
-            <button type="button">
+            <button type="button" id="app_button">
                 {{texts.download}}
                 <svg class="download_icon" width="20px" height="20px" stroke-width="1.5" viewBox="0 0 20 20" fill="none">
                     <path d="M6 20L18 20" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -54,10 +54,10 @@
             <div class="form_item">
                 <label for="otp_inputs" class="otp_label">{{texts.otp_label}}</label><br>
                 <div id="otp_inputs" class="otp_inputs">
-                    <label><input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required></label>
-                    <label><input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required></label>
-                    <label><input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required></label>
-                    <label><input class="otp_input_item" type="text" maxlength="1" autocomplete="off" required></label>
+                    <label><input class="otp_input_item" type="text" maxlength="1" inputmode="numeric" autocomplete="off" required></label>
+                    <label><input class="otp_input_item" type="text" maxlength="1" inputmode="numeric"  autocomplete="off" required></label>
+                    <label><input class="otp_input_item" type="text" maxlength="1" inputmode="numeric"  autocomplete="off" required></label>
+                    <label><input class="otp_input_item" type="text" maxlength="1" inputmode="numeric"  autocomplete="off" required></label>
                 </div>
             </div>
 
