@@ -17,7 +17,10 @@ class PaymentUI
         this.token = token;
         this.modal = false;
         this.verbose = verbose;
-        this.showDialogs = showDialogs;
+
+        // Transform showDialogs to object format
+        this.showDialogs = this._normalizeShowDialogs(showDialogs);
+
         this.handlers = handlers || {
             onSuccess: (data)=>{},
             onFailure: (data)=>{},
@@ -40,6 +43,33 @@ class PaymentUI
         return this;
     }
 
+    _normalizeShowDialogs(showDialogs)
+    {
+        // Support both boolean (legacy) and object formats
+        if (typeof showDialogs === 'boolean')
+        {
+            return {
+                onSuccess: showDialogs,
+                onFailure: showDialogs
+            };
+        }
+        else if (typeof showDialogs === 'object' && showDialogs !== null)
+        {
+            return {
+                onSuccess: showDialogs.onSuccess !== undefined ? showDialogs.onSuccess : true,
+                onFailure: showDialogs.onFailure !== undefined ? showDialogs.onFailure : true
+            };
+        }
+        else
+        {
+            // Default to showing both
+            return {
+                onSuccess: true,
+                onFailure: true
+            };
+        }
+    }
+
     toString()
     {
         return `PaymentUI 
@@ -50,7 +80,7 @@ class PaymentUI
           token: "${this.token ? this.token.substring(0, 8) + '...' : 'none'}",
           amount: ${this.amount},
           modal: ${this.modal},
-          showDialogs: ${this.showDialogs},
+          showDialogs: { onSuccess: ${this.showDialogs.onSuccess}, onFailure: ${this.showDialogs.onFailure} },
           verbose: ${this.verbose},
           hasLogo: ${!!this.logo},
           handlers: ${Object.keys(this.handlers).join(', ')}
@@ -136,8 +166,10 @@ class PaymentUI
 
     customAlert(type, message)
     {
-        // Only show dialog if showDialogs is enabled
-        if (!this.showDialogs)
+        // Check if we should show dialog based on type
+        const shouldShow = type === 'success' ? this.showDialogs.onSuccess : this.showDialogs.onFailure;
+
+        if (!shouldShow)
         {
             this.showLogs(`Alert (${type}):`, message);
             return;
@@ -285,6 +317,7 @@ class PaymentUI
                 download: this.localization.tag("download"),
                 card_label: this.localization.tag("card_label"),
                 card_placeholder: this.localization.tag("card_placeholder"),
+                card_error: this.localization.tag("error_message"),
                 otp_label: this.localization.tag("otp_label"),
                 submit_button: this.localization.tag("submit_button"),
                 secured_payment: this.localization.tag("secured_payment")
@@ -307,6 +340,7 @@ class PaymentUI
             .replace(/\{\{texts\.download\}\}/g, data.texts.download)
             .replace(/\{\{texts\.card_label\}\}/g, data.texts.card_label)
             .replace(/\{\{texts\.card_placeholder\}\}/g, data.texts.card_placeholder)
+            .replace(/\{\{texts\.card_error\}\}/g, data.texts.card_error)
             .replace(/\{\{texts\.otp_label\}\}/g, data.texts.otp_label)
             .replace(/\{\{texts\.submit_button\}\}/g, data.texts.submit_button)
             .replace(/\{\{texts\.secured_payment\}\}/g, data.texts.secured_payment);
@@ -330,7 +364,8 @@ class PaymentUI
             });
 
         const form = targetDocument.getElementById('payment_form');
-        if (form) {
+        if (form)
+        {
             form.addEventListener('submit', (e) =>
             {
                 e.preventDefault();
@@ -346,10 +381,11 @@ class PaymentUI
             currency: this.currency
         });
 
+        const doc = this.newWindowRef ? this.newWindowRef.document : document;
+        const submit_button = doc.querySelector(".submit_button");
+
         try
         {
-            const doc = this.newWindowRef ? this.newWindowRef.document : document;
-
             const cardInput = doc.getElementById("card_code");
             const card_code = cardInput.value.trim();
 
@@ -358,11 +394,11 @@ class PaymentUI
 
             this.showLogs('Processing payment with card:', card_code.substring(0, 4) + '****');
 
-            const submit_button = doc.querySelector(".submit_button");
+
             if (submit_button)
             {
                 submit_button.innerHTML = this.localization.tag("submit_button_processing");
-                submit_button.disabled = true;
+                //submit_button.style.disabled = true;
             }
 
             const data = await this.ypay.createTransaction(card_code, otp, this.amount, this.localization.current);
@@ -381,6 +417,12 @@ class PaymentUI
         {
             this.showLogs('Payment error:', err);
             this.customAlert('failure', err);
+
+            if (submit_button)
+            {
+                submit_button.innerHTML = this.localization.tag("submit_button");
+                submit_button.style.disabled = false;
+            }
 
             if (this.handlers.onFailure)
             {

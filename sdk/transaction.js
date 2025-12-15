@@ -130,6 +130,7 @@ class Transaction
         return this.validationError ? this.validationError.message : null;
     }
 
+    // Sanitizes data passed to the constructor
     sanitizeData(data = "")
     {
         if (data === "" || data === null || data === undefined)

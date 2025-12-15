@@ -13,8 +13,12 @@ const initFormController = (targetDocument = document) =>
     const app_button = targetDocument.querySelector("#app_button");
     const card_code = targetDocument.querySelector("#card_code");
     const card_number_icon = targetDocument.querySelector(".card_icon");
+    const error_message_card_number = targetDocument.querySelector('.error_message');
     const otp_inputs = [...targetDocument.querySelectorAll(".otp_input_item")];
-    const submit = targetDocument.querySelector(".submit_button");
+    const submit = targetDocument.querySelector(".submit_button")
+
+    // hides the error message by default
+    error_message_card_number.style.display = 'none';
 
     // Check if elements exist
     if (!form || !card_code || !submit || otp_inputs.length === 0)
@@ -44,6 +48,7 @@ const initFormController = (targetDocument = document) =>
     // Card number validations
     const cardNumberValidation = () =>
     {
+
         // Regex validation
         if (cardPattern.test(card_code.value.toString()))
         {
@@ -54,10 +59,9 @@ const initFormController = (targetDocument = document) =>
             }
             card_code.style.border = `1px solid ${primary_color}`;
 
-            const error_message_card_number = targetDocument.querySelector('.error-message');
             if (error_message_card_number)
             {
-                error_message_card_number.remove();
+                error_message_card_number.style.display = 'none';
             }
 
             validateOTP();
@@ -76,24 +80,24 @@ const initFormController = (targetDocument = document) =>
             }
             card_code.style.border = `1px solid ${error_color}`;
 
-            if (!targetDocument.querySelector('.error-message'))
+            if (!targetDocument.querySelector('.error_message'))
             {
                 const error_message_card_number = targetDocument.createElement("span");
-                error_message_card_number.className = "error-message";
-                error_message_card_number.textContent = "Enter XXXX-XXXX with letters/digits only";
-                error_message_card_number.style.color = error_color;
-                error_message_card_number.style.fontSize = "11px";
-                error_message_card_number.style.fontStyle = "italic";
-                error_message_card_number.style.marginTop = "4px";
-                error_message_card_number.style.display = "block";
-
-                if (card_number_icon)
-                {
-                    card_number_icon.style.top = "35%";
-                }
-
-                card_code.parentNode.appendChild(error_message_card_number);
+                error_message_card_number.className = "error_message";
             }
+
+            error_message_card_number.style.color = error_color;
+            error_message_card_number.style.fontSize = "11px";
+            error_message_card_number.style.fontStyle = "italic";
+            error_message_card_number.style.marginTop = "4px";
+            error_message_card_number.style.display = "block";
+
+            if (card_number_icon)
+            {
+                card_number_icon.style.top = "35%";
+            }
+
+            card_code.parentNode.appendChild(error_message_card_number);
 
             submitState(false);
         }
