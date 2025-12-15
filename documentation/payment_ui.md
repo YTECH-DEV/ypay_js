@@ -52,13 +52,13 @@ Manages the payment interface with modal or new tab display options.
 import PaymentUI from "path/to/ypay_ui/paymentUI.js";
 
 const paymentUI = new PaymentUI(
-    token, 
-    currency, 
-    language, 
-    handlers, 
-    showDialogs, 
-    verbose, 
-    shopName, 
+    token,
+    currency,
+    language,
+    handlers,
+    showDialogs,
+    verbose,
+    shopName,
     logo
 );
 ```
@@ -69,7 +69,7 @@ const paymentUI = new PaymentUI(
 - `currency` (string): Currency code. Default: `"XOF"`
 - `language` (string): Interface language ("en" or "fr"). Default: `"en"`
 - `handlers` (object): Success/failure callbacks. Default: `{}`
-- `showDialogs` (boolean): Show UI alert dialogs for success/failure. Default: `true`
+- `showDialogs` (boolean | object): Control UI alert dialogs. See [Show Dialogs Configuration](#show-dialogs-showdialogs) below. Default: `true`
 - `verbose` (boolean): Enable console logging for debugging. Default: `true`
 - `shopName` (string): Display name. Default: `"Unknown"`
 - `logo` (string): Logo image URL. Default: `""`
@@ -78,7 +78,7 @@ const paymentUI = new PaymentUI(
 ```js
 paymentUI.amount = 5000;        // Set transaction amount
 paymentUI.modal = true;         // true = modal, false = new tab
-paymentUI.showDialogs = false;  // Control UI alerts
+paymentUI.showDialogs = { onSuccess: true, onFailure: false };  // Control UI alerts
 paymentUI.verbose = true;       // Control console logging
 ```
 
@@ -126,16 +126,77 @@ const payment = new PaymentUI(token, "XOF", "en", {}, true, false);
 ```
 
 **Show Dialogs (`showDialogs`)**
-- `true`: Displays success/error alert dialogs in the UI
-- `false`: Only triggers callbacks, no UI alerts (messages logged to console if verbose is enabled)
+
+The `showDialogs` parameter provides granular control over when UI alert dialogs are displayed. It accepts either a boolean (for backward compatibility) or an object for fine-grained control.
+
+**Format 1: Boolean (Legacy)**
+- `true`: Displays alert dialogs for both success and failure
+- `false`: No UI alerts, only callbacks (messages logged to console if verbose is enabled)
 
 ```js
-// Show UI dialogs for success/failure
+// Show all dialogs
 const payment = new PaymentUI(token, "XOF", "en", {}, true, true);
 
-// No UI dialogs, callbacks only
+// No dialogs at all
 const payment = new PaymentUI(token, "XOF", "en", {}, false, true);
 ```
+
+**Format 2: Object (Recommended)**
+
+For granular control, pass an object with `onSuccess` and `onFailure` properties:
+
+```js
+{
+    onSuccess: boolean,  // Show dialog on successful payment
+    onFailure: boolean   // Show dialog on payment failure
+}
+```
+
+**Examples:**
+
+```js
+// Show only success dialogs (hide error dialogs)
+const payment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    {}, 
+    { onSuccess: true, onFailure: false }, 
+    true
+);
+
+// Show only failure dialogs (hide success dialogs)
+const payment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    {}, 
+    { onSuccess: false, onFailure: true }, 
+    true
+);
+
+// Show both (equivalent to showDialogs: true)
+const payment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    {}, 
+    { onSuccess: true, onFailure: true }, 
+    true
+);
+
+// Show neither (equivalent to showDialogs: false)
+const payment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    {}, 
+    { onSuccess: false, onFailure: false }, 
+    true
+);
+```
+
+**Note:** When dialogs are disabled, the corresponding callbacks in `handlers` are still triggered. Messages are logged to console if `verbose` is enabled.
 
 **Singleton Pattern**
 PaymentUI uses a singleton pattern. Multiple instantiations return the same instance:
@@ -188,7 +249,7 @@ const paymentUI = new PaymentUI(
         onSuccess: (data) => alert("Payment successful!"),
         onFailure: (error) => alert("Payment failed!")
     },
-    true,  // showDialogs
+    { onSuccess: true, onFailure: true },  // showDialogs
     true,  // verbose
     "My Shop",
     "./logo.png"
@@ -296,7 +357,7 @@ const paymentUI = new PaymentUI(
             alert("Payment failed. Please try again.");
         }
     },
-    true,  // showDialogs - display success/error alerts
+    { onSuccess: true, onFailure: true },  // Show all dialogs
     true,  // verbose - enable console logging
     "Mon Magasin",
     "path/to/assets/logo.png"
@@ -322,7 +383,7 @@ const paymentUI = new PaymentUI(
             showCustomErrorMessage(error);
         }
     },
-    false,  // No UI dialogs
+    false,  // No UI dialogs (equivalent to { onSuccess: false, onFailure: false })
     false,  // No console logs
     "My Shop"
 );
@@ -345,7 +406,7 @@ const paymentUI = new PaymentUI(
         onSuccess: (data) => console.log("Success:", data),
         onFailure: (error) => console.error("Failure:", error)
     },
-    false,  // No UI dialogs - cleaner testing
+    { onSuccess: false, onFailure: false },  // No UI dialogs
     true,   // Verbose logs - see everything in console
     "Test Shop"
 );
@@ -353,6 +414,57 @@ const paymentUI = new PaymentUI(
 paymentUI.amount = 500;
 paymentUI.modal = true;
 paymentUI.renderForm();
+```
+
+### Example 6: Success Dialog Only (Hide Errors)
+```js
+import PaymentUI from "path/to/ypay_ui/paymentUI.js";
+
+// Show success dialog but handle errors programmatically
+const paymentUI = new PaymentUI(
+    "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900",
+    "XOF",
+    "en",
+    {
+        onSuccess: (data) => {
+            // Success dialog will show automatically
+            console.log("Payment completed:", data);
+        },
+        onFailure: (error) => {
+            // No dialog shown, handle error programmatically
+            displayCustomErrorUI(error);
+            logErrorToAnalytics(error);
+        }
+    },
+    { onSuccess: true, onFailure: false },  // Only show success dialog
+    true,
+    "My Shop"
+);
+```
+
+### Example 7: Error Dialog Only (Silent Success)
+```js
+import PaymentUI from "path/to/ypay_ui/paymentUI.js";
+
+// Show error dialog but handle success silently (e.g., for background payments)
+const paymentUI = new PaymentUI(
+    "367|53RsuHJS2A4qB693ISdUlDtfVIGsPT29tGOvB6jKf9a6b900",
+    "XOF",
+    "en",
+    {
+        onSuccess: (data) => {
+            // No dialog, just redirect
+            window.location.href = "/dashboard?payment=success";
+        },
+        onFailure: (error) => {
+            // Error dialog will show automatically
+            console.error("Payment failed:", error);
+        }
+    },
+    { onSuccess: false, onFailure: true },  // Only show error dialog
+    true,
+    "My Shop"
+);
 ```
 
 ---
@@ -500,14 +612,73 @@ if (isNaN(amount) || amount <= 0)
 
 ```js
 // Production: Show dialogs, no verbose logs
-const prodPayment = new PaymentUI(token, "XOF", "en", handlers, true, false);
+const prodPayment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    handlers, 
+    { onSuccess: true, onFailure: true }, 
+    false
+);
 
-// Development: Show logs, no dialogs
-const devPayment = new PaymentUI(token, "XOF", "en", handlers, false, true);
+// Development: Show logs, show only error dialogs
+const devPayment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    handlers, 
+    { onSuccess: false, onFailure: true }, 
+    true
+);
 
 // Testing: Silent mode
-const testPayment = new PaymentUI(token, "XOF", "en", handlers, false, false);
+const testPayment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    handlers, 
+    false,  // or { onSuccess: false, onFailure: false }
+    false
+);
+
+// E-commerce checkout: Silent success, show errors
+const checkoutPayment = new PaymentUI(
+    token, 
+    "XOF", 
+    "en", 
+    {
+        onSuccess: (data) => window.location.href = "/order-complete",
+        onFailure: (error) => {} // Dialog will show
+    }, 
+    { onSuccess: false, onFailure: true }, 
+    false
+);
 ```
+
+### 6. Dialog Control Best Practices
+
+**When to show success dialogs:**
+- One-time donations or tips
+- Manual admin payments
+- Guest checkout scenarios
+- When users need explicit confirmation
+
+**When to hide success dialogs:**
+- Subscription renewals (silent success, redirect to dashboard)
+- Background top-ups or recharges
+- Multi-step checkout flows (success handled by next step)
+- When custom success UI is more appropriate
+
+**When to show error dialogs:**
+- User-initiated payments that need immediate retry
+- When the user should be aware of the failure
+- In development/testing for debugging
+
+**When to hide error dialogs:**
+- When implementing custom error handling UI
+- Automated payment retries
+- When logging errors for support team review
+- Background payment processes
 
 ---
 

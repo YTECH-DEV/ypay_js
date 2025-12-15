@@ -1,0 +1,57 @@
+{
+  "name": "ypay-sdk",
+  "version": "1.0.0",
+  "description": "YPAY Payment Gateway SDK with UI components for processing payments",
+  "main": "src/sdk/ypay.js",
+  "module": "src/sdk/ypay.js",
+  "types": "types/index.d.ts",
+  "jsdelivr": "dist/ypay-full.min.js",
+  "unpkg": "dist/ypay-full.min.js",
+  "files": [
+    "src/",
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build/bundle.js",
+    "minify": "node build/minify.js",
+    "build:all": "npm run build && npm run minify",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "prepublishOnly": "npm run build:all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YTECH-DEV/ypay_js.git"
+  },
+  "keywords": [
+    "payment",
+    "gateway",
+    "ypay",
+    "ytech",
+    "transaction",
+    "payment-processing",
+    "payment-ui",
+    "west-africa",
+    "xof",
+    "mobile-money",
+    "bf",
+    "Burkina Faso"
+  ],
+  "author": "YTECH <infos@ytech-bf.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YTECH-DEV/ypay_js/issues"
+  },
+  "homepage": "https://github.com/YTECH-DEV/ypay_js#readme",
+  "devDependencies": {
+    "terser": "^5.31.0",
+    "clean-css": "^5.3.3",
+    "html-minifier": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

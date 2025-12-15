@@ -1,10 +1,10 @@
 /*root of css variables*/
-@import url("./root.css");
+@import url("root.css");
 /*buttons styles*/
-@import url("./buttons.css");
+@import url("buttons.css");
 /*form styles*/
-@import url("./form.css");
+@import url("form.css");
 /*modal styles*/
-@import url("./modal.css");
+@import url("modal.css");
 /*alert styles*/
 @import url("custom_alert.css");
