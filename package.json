@@ -1,58 +1,17 @@
 {
-  "name": "@yaagretech/ypay_js",
+  "name": "ypay-sdk",
   "version": "1.0.0",
-  "description": "YPAY Payment Gateway SDK with UI components for processing payments",
-  "main": "src/sdk/ypay.js",
-  "module": "src/sdk/ypay.js",
-  "types": "types/index.d.ts",
-  "jsdelivr": "dist/ypay-full.min.js",
-  "unpkg": "dist/ypay-full.min.js",
-  "files": [
-    "src/",
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
+  "description": "YPAY Payment SDK with UI",
   "scripts": {
-    "build": "node build/minify.js",
-    "build:all": "node build/minify.js",
-    "minify": "node build/minify.js",
-    "prepublishOnly": "npm run build"
+    "build:sdk": "parcel build src/sdk/ypay.js src/sdk/transaction.js src/sdk/enums.js src/sdk/patterns.js --dist-dir dist/sdk --no-source-maps",
+    "build:ui": "parcel build src/ypay_ui/js/main.js --dist-dir dist/ui --no-source-maps",
+    "build:css": "parcel build src/ypay_ui/styles/style.css --dist-dir dist/css --no-source-maps",
+    "build": "npm run clean && npm run build:sdk && npm run build:ui && npm run build:css",
+    "clean": "rm -rf dist .parcel-cache"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YTECH-DEV/ypay_js.git"
-  },
-  "keywords": [
-    "payment",
-    "gateway",
-    "ypay",
-    "ytech",
-    "transaction",
-    "payment-processing",
-    "payment-ui",
-    "west-africa",
-    "xof",
-    "mobile-money",
-    "bf",
-    "Burkina Faso",
-    "mobile-money",
-    "burkina-faso",
-    "cfa",
-    "fintech"
-  ],
-  "author": "YTECH <infos@ytech-bf.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/YTECH-DEV/ypay_js/issues"
-  },
-  "homepage": "https://github.com/YTECH-DEV/ypay_js#readme",
   "devDependencies": {
-    "terser": "^5.31.0",
-    "clean-css": "^5.3.3",
-    "html-minifier": "^4.0.0"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "@parcel/packager-ts": "^2.12.0",
+    "@parcel/transformer-typescript-types": "^2.12.0",
+    "parcel": "^2.12.0"
   }
 }

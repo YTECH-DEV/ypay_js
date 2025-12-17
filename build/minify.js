@@ -9,13 +9,16 @@ const srcDir = path.join(__dirname, '../src');
 const distDir = path.join(__dirname, '../dist');
 
 // Ensure dist directory exists
-if (!fs.existsSync(distDir)) {
+if (!fs.existsSync(distDir))
+{
     fs.mkdirSync(distDir, { recursive: true });
 }
 
 // Helper: Copy directory recursively
-function copyDirectorySync(src, dest) {
-    if (!fs.existsSync(dest)) {
+function copyDirectorySync(src, dest)
+{
+    if (!fs.existsSync(dest))
+    {
         fs.mkdirSync(dest, { recursive: true });
     }
 
