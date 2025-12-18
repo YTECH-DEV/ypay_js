@@ -6,7 +6,7 @@ const { minify: minifyHTML } = require('html-minifier');
 
 // Paths
 const srcDir = path.join(__dirname, '../src');
-const distDir = path.join(__dirname, '../dist');
+const distDir = path.join(__dirname, '../dist2');
 
 // Ensure dist directory exists
 if (!fs.existsSync(distDir))

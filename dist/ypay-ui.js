@@ -1,4 +1,4 @@
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.PaymentUI = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -573,18 +573,33 @@ var _default = exports["default"] = Localization;
 },{}],8:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _paymentUI = _interopRequireDefault(require("./paymentUI.js"));
-var _paymentTriggerButtons = _interopRequireDefault(require("./paymentTriggerButtons.js"));
-var _alert_controller = _interopRequireDefault(require("./alert_controller"));
-var _init_form_controller = _interopRequireDefault(require("./init_form_controller"));
-var _localization = _interopRequireDefault(require("./localization"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-(0, _paymentTriggerButtons["default"])();
-var _default = exports["default"] = _paymentUI["default"];
+/*
+import PaymentUI from "./paymentUI.js";
+import buttonController from "./paymentTriggerButtons.js";
+import alertController from "./alert_controller";
+import initFormController from "./init_form_controller";
+import Localization from "./localization";
+
+buttonController();
+
+export default PaymentUI;
+
+ */
+
+// main.js - Convert to CommonJS
+var PaymentUI = require("./paymentUI.js")["default"];
+var buttonController = require("./paymentTriggerButtons.js")["default"];
+var alertController = require("./alert_controller")["default"];
+var initFormController = require("./init_form_controller")["default"];
+var Localization = require("./localization")["default"];
+buttonController();
+
+// Also expose to global if you want
+if (typeof window !== 'undefined') {
+  window.PaymentUI = PaymentUI;
+  window.YPAY = PaymentUI; // Optional
+}
+module.exports = PaymentUI;
 
 },{"./alert_controller":5,"./init_form_controller":6,"./localization":7,"./paymentTriggerButtons.js":9,"./paymentUI.js":10}],9:[function(require,module,exports){
 "use strict";
@@ -1010,4 +1025,5 @@ var PaymentUI = /*#__PURE__*/function () {
 _defineProperty(PaymentUI, "instance", void 0);
 var _default = exports["default"] = PaymentUI;
 
-},{"../../sdk/ypay.js":4,"./alert_controller.js":5,"./init_form_controller.js":6,"./localization.js":7}]},{},[8]);
+},{"../../sdk/ypay.js":4,"./alert_controller.js":5,"./init_form_controller.js":6,"./localization.js":7}]},{},[8])(8)
+});
