@@ -1,15 +1,23 @@
 import YPAY from "../../sdk/ypay.js";
 import Localization from "./localization.js";
+import alertController from "./alert_controller.js";
+import initFormController from "./init_form_controller.js";
+
+// Import HTML templates as raw strings
+import paymentFormTemplate from '../templates/payment_form.html?raw';
+import customAlertTemplate from '../templates/custom_alert.html?raw';
 
 class PaymentUI
 {
     static instance;
+
     constructor(token, currency, language, handlers = {}, showDialogs = true, verbose = true, shopName, logo)
     {
         if (PaymentUI.instance)
         {
             return PaymentUI.instance;
         }
+
         this.logo = logo || '';
         this.language = language || 'en';
         this.shopName = shopName || 'Unknown';
@@ -18,62 +26,47 @@ class PaymentUI
         this.modal = false;
         this.verbose = verbose;
 
-        // Transform showDialogs to object format
         this.showDialogs = this._normalizeShowDialogs(showDialogs);
-
         this.handlers = handlers || {
-            onSuccess: (data)=>{},
-            onFailure: (data)=>{},
+            onSuccess: (data) => {},
+            onFailure: (data) => {},
         };
+
         this.overlayElement = null;
         this.newWindowRef = null;
         this.alert = null;
         this.amount = 0;
 
-        // Set language
         this.localization = new Localization();
         this.localization.setLang(this.language);
 
-        // Validate
         this._validate();
-
         this.ypay = new YPAY(token, currency, shopName);
 
         PaymentUI.instance = this;
         return this;
+
     }
 
     _normalizeShowDialogs(showDialogs)
     {
-        // Support both boolean (legacy) and object formats
-        if (typeof showDialogs === 'boolean')
-        {
+        if (typeof showDialogs === 'boolean') {
             return {
                 onSuccess: showDialogs,
                 onFailure: showDialogs
             };
-        }
-        else if (typeof showDialogs === 'object' && showDialogs !== null)
-        {
+        } else if (typeof showDialogs === 'object' && showDialogs !== null) {
             return {
                 onSuccess: showDialogs.onSuccess !== undefined ? showDialogs.onSuccess : true,
                 onFailure: showDialogs.onFailure !== undefined ? showDialogs.onFailure : true
             };
         }
-        else
-        {
-            // Default to showing both
-            return {
-                onSuccess: true,
-                onFailure: true
-            };
-        }
+        return { onSuccess: true, onFailure: true };
     }
 
     toString()
     {
-        return `PaymentUI 
-        {
+        return `PaymentUI {
           shopName: "${this.shopName}",
           currency: "${this.currency}",
           language: "${this.language}",
@@ -96,7 +89,7 @@ class PaymentUI
             errors.push('Language is not available');
         }
 
-        if (this.token==="")
+        if (this.token === "")
         {
             errors.push('Token is required');
         }
@@ -150,23 +143,11 @@ class PaymentUI
 
     customAlertController(targetDocument, type, message)
     {
-        import('./alert_controller.js')
-            .then(module =>
-            {
-                if (module.default && typeof module.default === 'function')
-                {
-                    module.default(targetDocument, type, message);
-                }
-            })
-            .catch(err =>
-            {
-                this.showLogs('Alert controller not available:', err);
-            });
+        alertController(targetDocument, type, message);
     }
 
     customAlert(type, message)
     {
-        // Check if we should show dialog based on type
         const shouldShow = type === 'success' ? this.showDialogs.onSuccess : this.showDialogs.onFailure;
 
         if (!shouldShow)
@@ -175,46 +156,36 @@ class PaymentUI
             return;
         }
 
-        fetch("./ypay_ui/templates/custom_alert.html")
-            .then(response => response.text())
-            .then(template =>
+        const overlay = document.createElement('div');
+        overlay.className = 'alert-overlay';
+        overlay.innerHTML = this.renderTemplate(customAlertTemplate);
+        this.alert = overlay;
+
+        document.body.appendChild(this.alert);
+        this.customAlertController(document, type, message);
+
+        const alertBox = this.alert.querySelector(".alert");
+        const closingButton = alertBox.querySelector(".close");
+        const okButton = alertBox.getElementsByTagName("button")[0];
+
+        const close = () =>
+        {
+            if (this.alert && this.alert.parentNode)
             {
-                const overlay = document.createElement('div');
-                overlay.className = 'alert-overlay';
-                overlay.innerHTML = this.renderTemplate(template);
-                this.alert = overlay;
+                this.alert.parentNode.removeChild(this.alert);
+                this.alert = null;
+            }
 
-                document.body.appendChild(this.alert);
-
-                this.customAlertController(document, type, message);
-
-                const alertBox = this.alert.querySelector(".alert");
-                const closingButton = alertBox.querySelector(".close");
-                const okButton = alertBox.getElementsByTagName("button")[0];
-
-                const close = () =>
-                {
-                    if (this.alert && this.alert.parentNode)
-                    {
-                        this.alert.parentNode.removeChild(this.alert);
-                        this.alert = null;
-                    }
-
-                    let submit_btn = this._getTargetDocument().getElementsByClassName("submit_button")[0]
-                    if (submit_btn)
-                    {
-                        submit_btn.innerHTML = this.localization.tag("submit_button");
-                        submit_btn.disabled = false;
-                    }
-                }
-
-                closingButton.addEventListener("click", close);
-                okButton.addEventListener("click", close);
-            })
-            .catch(err =>
+            let submit_btn = this._getTargetDocument().getElementsByClassName("submit_button")[0];
+            if (submit_btn)
             {
-                this.showLogs('Failed to load alert template:', err);
-            });
+                submit_btn.innerHTML = this.localization.tag("submit_button");
+                submit_btn.disabled = false;
+            }
+        };
+
+        closingButton.addEventListener("click", close);
+        okButton.addEventListener("click", close);
     }
 
     formatAmount()
@@ -228,80 +199,63 @@ class PaymentUI
     {
         this.showLogs('Opening payment modal');
 
-        fetch('./ypay_ui/templates/payment_form.html')
-            .then(response => response.text())
-            .then(template =>
+        const overlay = document.createElement('div');
+        overlay.className = 'modal_overlay';
+        overlay.innerHTML = this.renderTemplate(paymentFormTemplate);
+
+        this.overlayElement = overlay;
+        document.body.appendChild(overlay);
+
+        setTimeout(() =>
+        {
+            const closeBtn = document.querySelector('.close_modal');
+            if (closeBtn)
             {
-                const overlay = document.createElement('div');
-                overlay.className = 'modal_overlay';
-                overlay.innerHTML = this.renderTemplate(template);
-
-                this.overlayElement = overlay;
-                document.body.appendChild(overlay);
-
-                setTimeout(() =>
+                closeBtn.addEventListener('click', () =>
                 {
-                    const closeBtn = document.querySelector('.close_modal');
-                    if (closeBtn)
-                    {
-                        closeBtn.addEventListener('click', () => {
-                            this.closePaymentUI();
-                        });
-                    }
+                    this.closePaymentUI();
+                });
+            }
 
-                    const overlay = document.querySelector('.modal_overlay');
-                    if (overlay)
-                    {
-                        document.addEventListener('keydown', (e) =>
-                        {
-                            if (e.key === 'Escape')
-                            {
-                                this.closePaymentUI();
-                            }
-                        })
-                    }
-
-                    this.initializeFormController(document);
-                }, 0);
-            })
-            .catch(err =>
+            const overlay = document.querySelector('.modal_overlay');
+            if (overlay)
             {
-                this.showLogs('Failed to load template:', err);
-            });
+                document.addEventListener('keydown', (e) =>
+                {
+                    if (e.key === 'Escape')
+                    {
+                        this.closePaymentUI();
+                    }
+                });
+            }
+
+            this.initializeFormController(document);
+        }, 0);
     }
 
     openNewTab()
     {
         this.showLogs('Opening payment in new tab');
 
-        fetch('./ypay_ui/templates/payment_form.html')
-            .then(response => response.text())
-            .then(template =>
-            {
-                const newTab = window.open("", '_blank');
+        const newTab = window.open("", '_blank');
 
-                if (!newTab)
-                {
-                    const errorMsg = 'Popup blocked - please allow popups for this site';
-                    this.showLogs(errorMsg);
-                    throw new Error(errorMsg);
-                }
+        if (!newTab)
+        {
+            const errorMsg = 'Popup blocked - please allow popups for this site';
+            this.showLogs(errorMsg);
+            throw new Error(errorMsg);
+        }
 
-                this.newWindowRef = newTab;
-                newTab.document.write(this.renderTemplate(template));
-                newTab.document.close();
+        this.newWindowRef = newTab;
+        newTab.document.write(this.renderTemplate(paymentFormTemplate));
+        newTab.document.close();
 
-                newTab.addEventListener('load', () =>
-                {
-                    this.initializeFormController(newTab.document);
-                });
+        newTab.addEventListener('load', () =>
+        {
+            this.initializeFormController(newTab.document);
+        });
 
-                newTab.focus();
-            })
-            .catch(err =>
-            {
-                this.showLogs('Failed to open payment tab:', err);
-            });
+        newTab.focus();
     }
 
     getTemplateData()
@@ -325,8 +279,24 @@ class PaymentUI
         };
     }
 
+    _urlResolver()
+    {
+        var baseUrl = 'https://cdn.jsdelivr.net/gh/YTECH-DEV/ypay_js@master';
+        // Auto-detect where the script was loaded from
+        const script = document.currentScript;
+        if (script)
+        {
+            // Extract directory from script URL
+            const scriptUrl = new URL(script.src);
+            const basePath = scriptUrl.pathname.split('/').slice(0, -1).join('/');
+            baseUrl = `${scriptUrl.origin}${basePath}`;
+        }
+        return baseUrl;
+    }
+
     renderTemplate(template)
     {
+        console.log(this._urlResolver())
         const data = this.getTemplateData();
 
         return template
@@ -343,25 +313,14 @@ class PaymentUI
             .replace(/\{\{texts\.card_error\}\}/g, data.texts.card_error)
             .replace(/\{\{texts\.otp_label\}\}/g, data.texts.otp_label)
             .replace(/\{\{texts\.submit_button\}\}/g, data.texts.submit_button)
-            .replace(/\{\{texts\.secured_payment\}\}/g, data.texts.secured_payment);
+            .replace(/\{\{texts\.secured_payment\}\}/g, data.texts.secured_payment)
+            .replace("./ypay_ui/", this._urlResolver());
     }
 
     initializeFormController(targetDocument)
     {
         this.showLogs('Initializing form controller');
-
-        import('./init_form_controller.js')
-            .then(module =>
-            {
-                if (module.default && typeof module.default === 'function')
-                {
-                    module.default(targetDocument);
-                }
-            })
-            .catch(err =>
-            {
-                this.showLogs('Form controller not available:', err);
-            });
+        initFormController(targetDocument);
 
         const form = targetDocument.getElementById('payment_form');
         if (form)
@@ -376,7 +335,8 @@ class PaymentUI
 
     async triggerPayment()
     {
-        this.showLogs('Payment triggered', {
+        this.showLogs('Payment triggered',
+            {
             amount: this.amount,
             currency: this.currency
         });
@@ -394,17 +354,14 @@ class PaymentUI
 
             this.showLogs('Processing payment with card:', card_code.substring(0, 4) + '****');
 
-
             if (submit_button)
             {
                 submit_button.innerHTML = this.localization.tag("submit_button_processing");
-                //submit_button.style.disabled = true;
             }
 
             const data = await this.ypay.createTransaction(card_code, otp, this.amount, this.localization.current);
 
             this.showLogs('Payment successful:', data);
-
             this.customAlert('success', data);
             this.closePaymentUI();
 

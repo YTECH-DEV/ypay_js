@@ -1,35 +1,37 @@
 {
-  "name": "ypay-sdk",
+  "name": "ypay-ui",
   "version": "1.0.0",
-  "description": "YPAY Payment SDK with UI",
+  "description": "YPAY Payment UI SDK",
+  "type": "module",
+  "main": "./dist/ypay-ui.umd.js",
+  "module": "./dist/ypay-ui.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ypay-ui.es.js",
+      "require": "./dist/ypay-ui.umd.js"
+    },
+    "./style.css": "./dist/ypay-ui.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build:sdk": "parcel build src/sdk/ypay.js src/sdk/transaction.js src/sdk/enums.js src/sdk/patterns.js --dist-dir dist/sdk --no-source-maps",
-    "build:ui": "parcel build src/ypay_ui/js/main.js --dist-dir dist/ui --no-source-maps",
-    "build:css": "parcel build src/ypay_ui/styles/style.css --dist-dir dist/css --no-source-maps",
-    "build": "npm run clean && npm run build:sdk && npm run build:ui && npm run build:css",
-    "clean": "rm -rf dist .parcel-cache"
+    "dev": "vite",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
-    "@parcel/packager-ts": "^2.12.0",
-    "@parcel/transformer-typescript-types": "^2.12.0",
-    "babel-loader": "^10.0.0",
-    "babelify": "^10.0.0",
-    "clean-webpack-plugin": "^4.0.0",
-    "css-loader": "^7.1.2",
-    "html-webpack-plugin": "^5.6.5",
-    "mini-css-extract-plugin": "^2.9.4",
-    "parcel": "^2.12.0",
-    "webpack": "^5.104.0",
-    "webpack-cli": "^6.0.1"
+    "vite": "^5.0.0"
   },
-  "dependencies": {
-    "html-minifier": "^4.0.0"
-  },
-  "browserify": {
-    "transform": [
-      ["babelify", { "presets": ["@babel/preset-env"] }]
-    ]
-  }
+  "keywords": [
+    "payment",
+    "sdk",
+    "ui",
+    "ypay"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }
